@@ -1,34 +1,26 @@
-# Bef is a responsive jekyll theme
+Fresh is a free blog template for Jekyll
+=============================
 
-Bef - Blog Enjoy Freedom is a responsive jekyll theme which created to be simple and freedom.
+![](assets/img/fresh.jpg)
 
-## Demo
+# Demo
 
-Check the theme in action [Demo](https://artemsheludko.github.io/bef/)
+![GIF](assets/img/fresh.gif)
 
-The main page would look like this:
+View this jekyll theme in action [here](http://artemsheludko.pw/fresh/)
 
-![Main page preview](https://github.com/artemsheludko/bef/blob/master/assets/img/bef_main_page.jpg?raw=true)
+Integrations
+  - [Google Fonts](https://fonts.google.com/)
+  - [Disqus](https://disqus.com/)
+  - [Font Awesome](http://fontawesome.io/)
+  - Social media links
 
-The post page would look like this:
+# How to Use
 
-![Post page preview](https://github.com/artemsheludko/bef/blob/master/assets/img/bef_post.jpg?raw=true)
+  For those unfamiliar with how Jekyll works, check out [jekyllrb.com](https://jekyllrb.com/) for all the details,
+  or read up on just the basics of [front matter](https://jekyllrb.com/docs/frontmatter/), [writing posts](https://jekyllrb.com/docs/posts/),
+  and [creating pages](https://jekyllrb.com/docs/pages/).
 
-## Features
-
-- [Google Fonts](https://fonts.google.com/)
-- [Font Awesome](http://fontawesome.io/)
-- [Vide](http://vodkabears.github.io/vide/)
-- [Disqus](https://disqus.com/)
-- [MailChimp](https://mailchimp.com/)
-- [Formspree!](https://formspree.io/)
-- [Analytics](https://analytics.google.com/analytics/web/)
-- Share Buttons, Recent Post, Section Author, Contact and more...
-
-## Installation:
-
-Fork the ``master`` branch and delete ``gh-pages`` branch in it. This is important because ``gh-pages`` branch is used here only to host the blog. You should be using the master branch as the source and create a fresh ``gh-pages`` branch.
-
-### License
+## License
 
 GNU General Public License v3.0

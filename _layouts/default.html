@@ -3,10 +3,14 @@
 {% include head.html %}
 <body>
 
-  {{ content }}
+  {% include sidebar.html %}
 
-  {% include arrow_top.html %}
-  {% include javascripts.html %}
-  {% include analytics.html %}
+  <main role="main">
+    <div class="content">
+      {{content}}
+    </div>
+  </main>
+
+{% include analytics.html %}
 </body>
 </html>
