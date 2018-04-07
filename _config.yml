@@ -2,14 +2,14 @@
 baseurl: ""
 url: "https://danielhp95.github.io"
 title: Reinforce my learning # site's title
-description: "A website with blog posts and pages" # used by search engines
+description: "A website where a PhD student talks about his journey in a field of Reinforcement Learning and game AI in general" # used by search engines
 
 
 # THEME-SPECIFIC CONFIGURATION
 theme_settings:
   # Meta
-  title: Type on Strap # blog's title
-  avatar: assets/img/triangle.svg
+  title: Reinforce my Learning # blog's title
+  avatar: assets/img/me-cropped.jpeg
   favicon: assets/favicon.ico
   gravatar: # Email MD5 hash
 
@@ -18,10 +18,9 @@ theme_settings:
      <p>Change header text in <code>_config.yml</code> <br> to update this feature.</p>
   header_text_feature_image: assets/img/pexels/triangular.jpeg
   footer_text: >
-   Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
+   I must thank <a href="https://jekyllrb.com/">Jekyll</a> and <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>.
 
   # Icons
-  rss: true  # Make sure you created a feed.xml with feed.xml layout
   email_address: # Full email address, e.g. "sam@example.com"
   behance:
   bitbucket:
@@ -29,7 +28,7 @@ theme_settings:
   facebook:
   flickr:
   gitlab:
-  github: "sylhare"
+  github: "danielhp95"
   google_plus:
   instagram:
   keybase:
