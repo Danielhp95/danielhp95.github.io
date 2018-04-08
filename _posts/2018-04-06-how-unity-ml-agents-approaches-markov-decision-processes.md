@@ -12,7 +12,7 @@ On the left hand side of the diagram below we have the classical graphical repre
 
  
 (FIX)
-![MDP]({{ site.baseurl }}/assets/img/posts/MDP-and-Unity-ml-agents.png)
+![mdp-and-unity]({{ site.baseurl }}/assets/img/posts/MDP-and-Unity-ml-agents.png)
 
 
 For this we need to understand what are the exact components of an MDP. We not only need to know the relation between those components, but also how they are _not_ related. We need to define their boundaries. On a world where encapsulation is a thing, knowing the realm of things is important.
@@ -56,6 +56,8 @@ In order to differentiate between the three elements in Unity ML-agents, I'll us
     * Global episode length – How long the episode will last. When reached, all agents are set to done.
 
 
+## Dwelving into the code
+
 Now that we have briefly described both the formal elements that define and MDP and the 3 hierarchical tools provided by Unity ML-agents, we are going to make the connection. Let's jam. We will start by diving into the code, don't be afraid.
 
 First, we will open the <span style="color:red">`Academy.cs`</span> file. Notice how <span style="color:red">`FixedUpdate()`</span> almost exclusively handles a call to <span style="color:red">`RunMdp()`</span> method. [The FixedUpdate() method](https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html) is called every fixed framerate, which means that hopefully the underlying MDP will move a timestep at a fixed framerate.
@@ -83,17 +85,25 @@ void RunMDP() {
         DecideAction()
     }
     AcademyStep()
-    foreach (Brain b in brains) {
-        brain.Step()
-    }
+    brain.Step()
 }
 {% endhighlight %}
 
 The hyperparameter `framesToSkip` is the number of frames that the Academy will wait per call to <span style="color:red">`Step()`</span> and <span style="color:red">`DecideAction()`</span>. However, the user defined function <span style="color:red">`AcademyStep()`</span> will be called on each timestep. The `Brain` function <span style="color:green">`Step()`</span> which results in a call to agent's function <span style="color:blue">`AgentStep()`</span> will be called each timestep as well. This means that an action is carried out every timestep, but the decision on what action to take happens every `framesToSkip`. For future work, this constraint of taking an action per timestep is what differentiates a Markov Decision Process from a Semi-Markov Decision Process (SMDP).
 
-The <span style="color:red">`Step()`</span> function is responsible for reseting any agent that has finished an episode and initializing the reward for that timestep to 0. Most importantly, it calls the <span style="color:red">`SendState()`</span> function. Its functionality is analogous to the bottom arrow on the MDP diagram, the one that carries $$ r_t $$ and $$ s_t $$ from the environment over to the agent. The exact implementation of <span style="color:green">`SendState()`</span> (yes, in green, as the academy forwards the call to a `Brain` function with the same name) depends on the type of `CoreBrain` being used (`External`, `Internal`, `Player`). But the basic idea is that the function <span style="color:blue">`CollectState()`</span> is called, which collects the state from the environment, a list of `floats`. Remember how we defined a state $$ s $$ as $$ s \in \mathbb{R}^D $$? It is important to iterate the fact that the agent does not receive an state $$ s_t $$ per timestep $$ t $$. The agent *collects* it in the function <span style="color:blue">`CollectState()`</span>. This becomes handy when you have different agents in the scene, each one pillaging different things from the environment. It also allows the agent to pick and choose whichever elements from the environment that it wants, and leave out other parts. The reward is collected by <span style="color:green">`CollectRewards()`</span> which merely stores the value inside <span style="color:blue">`agent.reward`</span> computed in the previous iteration. Now we have a state-reward pair $$ (s_t, r_t) $$ and we are ready to use the policy $$ \pi $$ to compute the next action.
+The <span style="color:red">`Step()`</span> function is responsible for reseting any agent that has finished an episode and initializing the reward for that timestep to 0. Most importantly, it calls the <span style="color:red">`SendState()`</span> function. Its functionality is analogous to the bottom arrow on the MDP diagram, the one that carries $$ r_t $$ and $$ s_t $$ from the environment over to the agent. The exact implementation of <span style="color:green">`SendState()`</span> (yes, in green, as the academy forwards the call to a `Brain` function with the same name) depends on the type of `CoreBrain` being used (`External`, `Internal`, `Player`). But the basic idea is that the agent function <span style="color:blue">`CollectState()`</span> is called, which collects the state from the environment, a list of `floats`. Remember how we defined a state $$ s $$ as $$ s \in \mathbb{R}^D $$? It is important to iterate the fact that the agent does not receive an state $$ s_t $$ per timestep $$ t $$. The agent *collects* it in the function <span style="color:blue">`CollectState()`</span>. This becomes handy when you have different agents in the scene, each one recording different values from the environment. Essentially allowing for different MDPs to be created from a single environment. It also allows the agent to pick and choose whichever elements from the environment that it wants, and leave out other parts it considers irrelevant. The reward is collected by the brain function <span style="color:green">`CollectRewards()`</span> which merely stores the value inside <span style="color:blue">`agent.reward`</span> computed in the previous iteration. Now we have a state-reward pair $$ (s_t, r_t) $$ and we are ready to use the policy $$ \pi $$ to compute the next action.
 
+We now move to the left hand side box of the diagram, the one containing the <span style="color:blue">agent's</span> policy. We want to calculate the next action to be taken: $$ a_{t+1} \sim \pi(s_t) $$. This process is triggered by the <span style="color:red">`Academy`</span> calling the <span style="color:red">`DecideAction()`</span> function. This call triggers a further call to a brain <span style="color:green">`DecideAction()`</span> function whose implementation, again, depends on the type of `CoreBrain`. For `External`, the action $$a_t$$ is retrieved from an external process for which Unity has given the current state $$s_t$$, reward $$r_t$$ and other meaningful information. For `Internal`, Unity takes the current state $$s_t$$ and inputs it to a trained model. After running a forward pass, the action $$a_t$$ is sampled from the output layer of the model (Assumming the model is a neural network).Finally, for a `Player` `CoreBrain`, the action is taken directly from user input, simples!.
 
+By now we have essentially calculated $$ a_{t_1} \sim \pi(s_t) $$. The brain calls <span style="color:green">`SendAction()`</span> so that the agent can <span style="color:blue">`UpdateAction()`</span>. That last function makes sure that the action decided by the <span style="color:green">`Brain`</span> associated to that agent is stored safely inside <span style="color:blue">`agent.StoredAction`</span>, which will serve as input to <span style="color:blue">`AgentStep()`</span> but let's not get ahead of ourselves.
+
+It isn't until now, that all this computaiton has happened, that the user (you) has some agency (fine choice of words) in the MDP. It is now the turn of the user defined <span style="color:red">`AcademyStep()`</span> function. This function was the reason why I decided to write this article. What is it's purpose? Well, the <span style="color:red">`AcademyStep()`</span> function should be use as part of the transition probability function $$ P(s_{t+1} \mid s_t, a_t) $$. More formally, this function should contain all behaviour of the function $$P$$ that does **not** depened on $$a_t$$, but purely on $$s_t$$. There will be some examples on how and why this is useful later on.
+
+We now arrive at the right hand side box of the classical MDP diagram, the one that samples an state $$ s_{t+1} $$ from the transition probability function $$P$$ and calculates a reward using $$ R$$. The last piece of the puzzle.
+
+#### *Why is the reward stored in a class field and the state is retreived from a function?*
+
+If we the <span style="color:green">`Brain`</span> sent a decision (an action) to the <span style="color:blue">`Agent`</span> at every timestep, then it could make sense to either keep both reward and state as a class field, or both as a function. It isn't a good coding practice to keep two concepts at the same conceptual level at different levels of accessibility (fix). However, notice that the brain function <span style="color:green">`Step()`</span> is called regardless of whether there is a new action to be carried out. This means that an action needs to be taken at every timestep. Therefore it makes sense to keep the reward as a field, which we add to after performing an action on every frame: <span style="color:blue">agent.reward</span> $$ += \mathbb{R}(s_t, a_t, s_{t+1} $$. (specify that the state only needs to be collected on demand, thus keeping in in a function makes more sense that changing the value of a field on evey frame?)
 
 
 ## Notes
@@ -102,39 +112,3 @@ The <span style="color:red">`Step()`</span> function is responsible for reseting
 * The transition function $$ P(s_{t+1} \mid s_t, a_t) $$ lives partially in <span style="color:red">`AcademyStep()`</span> and <span style="color:blue">`AgentStep()`</span>. This isn't ideal.
 * The reward function $$ R(s_t, a_t, s_{t+1}) $$ should live inside <span style="color:blue">`AgentStep()`</span>.
 * The action is computed, but not executed. It is up to the user to implemnt AgentStep in such a way that the action is executed in the environment.
-
-## Old stuff
-Jekyll supports the use of [Markdown](http://daringfireball.net/projects/markdown/syntax) with inline HTML tags which makes it easier to quickly write posts with Jekyll, without having to worry too much about text formatting. A sample of the formatting follows.
-
-Tables have also been extended from Markdown:
-
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
-
-Here's an example of an image, which is included using Markdown:
-
-![Image of a glass on a book]({{ site.baseurl }}/assets/img/pexels/book-glass.jpeg)
-
-Highlighting for code in Jekyll is done using Base16 or Rouge. This theme makes use of Rouge by default.
-
-{% highlight js %}
-// count to ten
-for (var i = 1; i <= 10; i++) {
-    console.log(i);
-}
-
-// count to twenty
-var j = 0;
-while (j < 20) {
-    j++;
-    console.log(j);
-}
-{% endhighlight %}
-
-Type on Strap uses KaTeX to display maths. Equations such as $$S_n = a \times \frac{1-r^n}{1-r}$$ can be displayed inline.
-
-Alternatively, they can be shown on a new line:
-
-$$ f(x) = \int \frac{2x^2+4x+6}{x-2} $$
