@@ -1,0 +1,31 @@
+---
+---
+
+@import "type-on-strap";
+
+figure figcaption {
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.redtag {
+    color: red
+}
+
+.image-left {
+    display: block;
+    margin-left: auto;
+    float: left;
+}
+
+.image-right {
+    display: block;
+    margin-right: auto;
+    float: right;
+}
+
+.resizedImage {
+   width: 50%; 
+   height: 50%; 
+}
