@@ -69,7 +69,6 @@ Now that we have briefly described both the formal mathematical elements that de
 First, we will open the <span style="color:red">`Academy.cs`</span> file. Notice how <span style="color:red">`FixedUpdate()`</span> almost exclusively handles a call to <span style="color:red">`RunMdp()`</span> method. At runtime, Unity's [FixedUpdate() method](https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html) is called every fixed framerate, which means that hopefully the underlying MDP will go through its loop on a fixed framerate. That is, it will broadcast it's current state and reward for the agent's previous action, the agent will decide on an action to take, and it will be processed by the environment at a fixed rate.
 
 {% highlight c# %}
-
 // The FixedUpdate() method, snippet from Academy.cs
 void FixedUpdate() {
    if (acceptingSteps) // Makes sure the Academy has finished initialization
@@ -109,13 +108,11 @@ The <span style="color:red">`Step()`</span> function is responsible for various 
 </div>
 <figure>
     {% highlight c# %}
-
     // Snippet from Brain.cs
     public void SendState()
     {
         coreBrain.SendState();
     }
-
     {% endhighlight %}
     <figcaption >Reward and state going from environment to agent.</figcaption>
 </figure>
