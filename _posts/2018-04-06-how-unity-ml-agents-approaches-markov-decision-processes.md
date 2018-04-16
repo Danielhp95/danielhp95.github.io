@@ -5,19 +5,20 @@ tags: [Unity, Reinforcement Learning, Markov Decision Processes]
 ---
 
 
-<p style="text-align: center; font-style: italic;">This article was written for Unity ML-agents v0.3</p>
 
-At the end of 2017, Unity released their own [module for reinforcement learning](https://blogs.unity3d.com/2017/09/19/introducing-unity-machine-learning-agents/). They call it Unity ML-agents, but really it's just about reinforcement learning agents. If you know anything about reinforcement learning, you know that the environments where agents act are modelled as [Markov Decision Processes](https://en.wikipedia.org/wiki/Markov_decision_process). Leaving the Markov property aside, the idea of an MDP is simple. There is an environment with a set of states and possible actions that transition one state to another. At every timestep $$t$$, the agent takes one of these actions which modify the environment and in turn recieves an immediate reward linked to the state and action. The goal of the agent is to maximize the cummulative reward that it recieves as it interacts with the environment.
+At the end of 2017, Unity released their own [module for reinforcement learning](https://blogs.unity3d.com/2017/09/19/introducing-unity-machine-learning-agents/). They call it Unity ML-agents, but really it's just about reinforcement learning agents. If you know anything about reinforcement learning, you know that the environments where agents act are modelled as [Markov Decision Processes](https://en.wikipedia.org/wiki/Markov_decision_process). Leaving the Markov property aside, the idea of an MDP is simple. There is an environment with a set of states and possible actions that transition one state to another. At every timestep $$t$$, the agent takes one of these actions which modify the environment and in turn recieves an immediate reward linked to that action and the state the environment was in. The goal of the agent is to maximize the cummulative reward that it recieves as it interacts with the environment.
 
-However, Unity doesn't present us with an exact concept of an MDP, at least not too clearly. This ultimately works in their favour, as it allows them to add a few levels of abstraction to the basic MDP. To name a few:  MDPs are inherently single agent (another one?). They also provide a nice enough interface to switch the controll (the brain) of an agent to the Player, the built in Unity code or to external processes. This is precisely how they allow to debug an AI using user testing, to train it with external processes, and to embed it inside the game. Pretty neat.
+<p style="text-align: center; font-style: italic;">Disclaimer: This article was written for Unity ML-agents v0.3</p>
 
-On the left hand side of the diagram below we have the classical graphical representation of an MDP. On the right hand side, we have the framework that Unity presents us with. Even though these two concepts are really similar, the transition from one to the other wasn't 100% clear to me at first. This article investigates exactly how one relates to one another. Disclaimer: this is a high-level  discussion and the level of technical depth won't be consistent.
+However, Unity doesn't present us with an exact concept of an MDP, at least not too clearly. This ultimately works in their favour, as it allows them to add a few levels of abstraction to the basic MDP. For instance, Unity supports multi agent environments, where MDPs are inherently single agent. They also provide a nice enough interface to switch the control (the brain) of an agent to the Player, the built in Unity code or to an external processes. This is precisely how they allow to debug an AI using manual testing, to train it with external processes, and to embed it inside the game. Pretty neat.
+
+On the left hand side of the diagram below we have the classical graphical representation of an MDP. On the right hand side, we have the framework that Unity presents us with. Even though these two concepts are really similar, the transition from one to the other wasn't 100% clear to me at first. This article investigates exactly how they relate to each other.
 
  
 ![mdp-and-unity]({{ site.baseurl }}/assets/img/posts/MDP-and-Unity-ml-agents.png)
 
 
-For this we need to understand what are the exact components of an MDP. We not only need to know the relation between those components, but also how they are _not_ related. We need to define their boundaries. On a world where encapsulation is a thing, knowing the realm of things is important.
+For this we need to understand what are the exact components of an MDP. We not only need to know the relation between those components, but also how they are _not_ related. On a world where encapsulation is a thing, knowing the boundaries of the components of the structures you work with is important.
 
 ## Elements of an MDP:
 ### Environment
@@ -25,43 +26,37 @@ $$P(s_{t+1} | s_t, a_t)$$
 **: Transition probability function**. It represents the probability of transitioning to state $$s_{t+t}$$ if at state $$s_t$$ the agent took action $$a_t$$. Typically a state $$s$$ is represented as a vector $$ s \in \mathbb{R}^D $$.
 
 $$R(s_t, a_t, s_{t+1})$$
-**: Reward function**. Represents the immediate reward obained by carrying out action $$a_t$$ at state $$s_t$$, changing the environment state to $$s_{t+1}$$. A reward $$r$$ is always a real valued $$r \in \mathbb{R}$$
+**: Reward function**. Represents the immediate reward obained by carrying out action $$a_t$$ at state $$s_t$$, changing the environment state to $$s_{t+1}$$. A reward $$r$$ is always a real valued $$r \in \mathbb{R}$$.
 
 ### Agent
 $$ \pi(a_t | s_t) $$ **: Policy**. The function that fully defines the agent's behaviour. A mapping from states to actions (or distributions over actions in the stochastic case, but that distiction is not important today). 
 
+<div class="centerfigure">
 <figure>
     <img src="{{ site.baseurl }}/assets/img/posts/rl-loop-equations.png" alt="my alt text"/>
     <figcaption >Reinforcement learning loop for a Markov Decision Process.</figcaption>
 </figure>
+</div>
 
 
-Given the elements of an MDP and the diagram above, we can sketch out a bit of pseudocode for an episode in an Markov decision Process.
+The classic reinforcement learning loop can be broadly defined in the following steps:
 
-## Reinforcement learning loop pseudocode algorithm
-
-1. Initialize environment and agents.<br/><br/>
-Repeat 2-5 until termination. t= 0.
-2. check for termination.
-3. Agent receives state $$s_t$$ and reward $$r_t$$
-4. Agent decides on action $$a_{t+1} = \pi(s_t)$$.
-5. Agent executes action $$a_{t+1}$$, modifying the environment.
-
-$$_t$$
++ Initialize environment and agents. Set $$ t \leftarrow 0 $$.
++ Repeat 1-5 until termination.
+1. check for termination.
+2. Agent receives state $$s_t$$ and reward $$r_t$$ from the environment.
+3. Agent decides on action $$a_t$$ using its policy $$ a_t \sim \pi(s_t)$$.
+4. Agent executes action $$a_t$$, modifying the environment.
+5. $$ t \leftarrow t+1$$.
 
 ## Elements of Unity ML-agents
 
 
 In order to differentiate between the three elements in Unity ML-agents, I'll use distinct colours to represent weather a function / property belongs to an <span class="redtag">academy</span>, <span style="color:green">brain</span> or <span style="color:blue">agent</span>.
-* <span style="color:blue">**Agent**</span>: each Agent can have a unique set of states and observations, take unique actions within the environment, and receive unique rewards for events within the environment. An agent’s actions are decided by the brain it is linked to.
-* <span style="color:green">**Brain**</span>: Each Brain defines a specific state and action space, and is responsible for deciding which actions each of its linked agents will take. As a technical note, the `Brain` class is an intermediary class between the <span style="color:red">Academy</span> and the <span style="color:blue">agents</span>. The `Brain` delegates the heavy lifting to the `CoreBrains`. These `CoreBrains` can be:
-    * `External`, which gather *state*  and *reward* information from Unity <span style="color:blue">agents</span>, send it to an external Python process which decides on an action, and then communicates that decision to all agents.
-    * `Internal`, *state* and *reward* information is gathered from agents and given to a trained RL model as input, which spits out an action that is given to the agents to execute. The key is that the model is embedded inside the Unity application. 
-    * `Player`, no information is gathered from the agents linked to the brain. The player decides on an input by herself.
-* <span style="color:red">**Academy**</span>: The Academy object within a scene also contains as children all Brains within the environment. Each environment contains a single Academy which defines the scope of the environment, in terms of:
-    * Engine Configuration – The speed and rendering quality of the game engine in both training and inference modes.
-    * Frameskip – How many engine steps to skip between each agent making a new decision.
-    * Global episode length – How long the episode will last. When reached, all agents are set to done.
+
+* <span style="color:red">**Academy**</span>: The Academy object orchestrates the whole MDP. Each environment contains a single Academy which defines the scope of the environment. There are a few environment hyperparameters that we can tune, such as the number of timesteps we want to skip before deciding on a new action or the global episode length. The <span style="color:red">academy</span> is the component that starts the execution of the final MDP.
+* <span style="color:green">**Brain**</span>: Each Brain defines a specific state and action space, and is responsible for deciding which actions each of its linked agents will take. As a technical note, the <span style="color:green">brain</span> class is an intermediary class between the <span style="color:red">academy</span> and the <span style="color:blue">agents</span>. The  <span style="color:green">brain</span> delegates the heavy lifting to the `CoreBrains`. These `CoreBrains` can be: `External`, `Internal`, or `Player`. More on these later
+* <span style="color:blue">**Agent**</span>: each Agent can have a unique set of states and observations, take unique actions within the environment, and receive unique rewards for events within the environment. An <span style="color:blue">agent</span>’s actions are decided by the <span style="color:green">brain</span> it is linked to.
 
 
 ## Dwelving into the code
@@ -75,7 +70,7 @@ First, we will open the <span style="color:red">`Academy.cs`</span> file. Notice
 
 {% highlight c# %}
 
-// The FixxedUpdate() method, snippet from Academy.cs
+// The FixedUpdate() method, snippet from Academy.cs
 void FixedUpdate() {
    if (acceptingSteps) // Makes sure the Academy has finished initialization
    {
@@ -90,7 +85,7 @@ void FixedUpdate() {
 
 // (Simplified!) snippet from Academy.cs
 void RunMDP() {
-    // Initialization code
+    // Academy, brain and agent initialization code
     if (skippingFrames) { // Is it time to act or use same action
         Step()
         DecideAction()
@@ -99,20 +94,23 @@ void RunMDP() {
     brain.Step()
 }
 {% endhighlight %}
-The <span style="color:red">`skippingFrames`</span> boolean present inside the `if` statement depends on the <span style="color:red">academy</span> hyperparameter <span style="color:red">`framesToSkip`</span>, which represents the number of frames that the <span style="color:red">academy</span> will wait per call to <span style="color:red">`Step()`</span> and <span style="color:red">`DecideAction()`</span>. However, the user defined function <span style="color:red">`AcademyStep()`</span> and the  <span style="color:green">brain</span> function <span style="color:green">`Step()`</span> will be called on *every* timestep. <span style="color:green">`Step()`</span> invokes agent's <span style="color:blue">`AgentStep()`</span> function, which carries out the last computed action. This means that an action computed inside <span style="color:red">`DecideAction()`</span> will be carried out for <span style="color:red">`skippingFrames`</span> consecutive timesteps, but the decision on what action to take happens every <span style="color:red">`framesToSkip`</span> timesteps. The name <span style="color:red">`framesToSkip`</span> is not great, perhaps a better alternative would be <span style="color:red">`framesBeforeDecisionPoint`</span>.
+
+The <span style="color:red">`skippingFrames`</span> boolean present inside the `if` statement depends on the <span style="color:red">academy</span> hyperparameter <span style="color:red">`framesToSkip`</span>, which represents the number of frames that the <span style="color:red">academy</span> will wait per call to <span style="color:red">`Step()`</span> and <span style="color:red">`DecideAction()`</span>. However, the user defined function <span style="color:red">`AcademyStep()`</span> and the  <span style="color:green">brain</span> function <span style="color:green">`Step()`</span> will be called on *every* timestep. <span style="color:green">`Step()`</span> invokes agent's <span style="color:blue">`AgentStep()`</span> function, which carries out the last computed action. This means that an action computed inside <span style="color:red">`DecideAction()`</span> will be repeated during <span style="color:red">`framesToSkip`</span> consecutive timesteps, but the decision on what action to take happens every <span style="color:red">`framesToSkip`</span> timesteps. The name <span style="color:red">`framesToSkip`</span> is not great, perhaps a better alternative would be <span style="color:red">`framesBeforeDecisionPoint`</span>.
 
 As a side note, this constraint of taking an action per timestep is what differentiates a Markov Decision Process from a Semi-Markov Decision Process (SMDP).
 
 The <span style="color:red">`Step()`</span> function is responsible for various things. On the side, it resets any agent that has finished an episode and sets the reward for that timestep to `0`. Most importantly, it calls the <span style="color:red">`SendState()`</span> function.
 
-<figure class="image-right">
+<div class="centerfigure">
+<figure>
     <img src="{{ site.baseurl }}/assets/img/posts/s-r.png" alt="my alt text"/>
     <figcaption >Reward and state going from environment to agent.</figcaption>
 </figure>
-<figure class="image-right">
+</div>
+<figure>
     {% highlight c# %}
 
-    // Sinnpet from Brain.cs
+    // Snippet from Brain.cs
     public void SendState()
     {
         coreBrain.SendState();
@@ -122,55 +120,41 @@ The <span style="color:red">`Step()`</span> function is responsible for various 
     <figcaption >Reward and state going from environment to agent.</figcaption>
 </figure>
 
-The functionality of <span class="redtag">`SendState()`</span> is analogous to the bottom arrow on the MDP diagram, the one that carries $$ r_t $$ and $$ s_t $$ from the environment over to the agent. The exact implementation of <span style="color:green">`SendState()`</span> (yes, in green, as the academy forwards the call to a <span style="color:green">brain</span> function with the same name) depends on the type of `CoreBrain` being used (`External`, `Internal` or `Player`). But the basic idea is that the <span style="color:blue">agent</span> function <span style="color:blue">`CollectState()`</span> is invoked, which collects the state from the environment. In `C#` terms, the state is represented as a `List<float>`. Remember how we defined a state $$ s $$ as $$ s \in \mathbb{R}^D $$? It is important to iterate the fact that the agent does not receive an state $$ s_t $$ per timestep $$ t $$. The agent *collects* it in the function <span style="color:blue">`CollectState()`</span>, it is not handed over by the environment in the same way it would in a classical MDP scenario. This may seem cumbersome, but it becomes handy when you have different agents in the scene, each one recording different values from the environment. Essentially allowing for different MDPs to be created from a single environment. It also allows the agent to pick and choose whichever elements from the environment that it wants, and leave out other parts it considers irrelevant. The function <span style="color:blue">`CollectState()`</span> is defined by the user.
+The functionality of <span class="redtag">`SendState()`</span> is analogous to the bottom arrow on the MDP diagram, the one that carries $$ r_t $$ and $$ s_t $$ from the environment over to the agent. The exact implementation of <span style="color:green">`SendState()`</span> (yes, in green, as the academy forwards the call to a <span style="color:green">brain</span> function with the same name) depends on the type of `CoreBrain` being used (`External`, `Internal` or `Player`). But the basic idea is that the <span style="color:blue">agent</span> function <span style="color:blue">`CollectState()`</span> is invoked, which collects the state from the environment. In `C#` terms, the state is represented as a `List<float>`. Remember how we defined a state $$ s $$ as $$ s \in \mathbb{R}^D $$? It is important to iterate the fact that the agent does not receive an state $$ s_t $$ per timestep $$ t $$. The agent *collects* it in the function <span style="color:blue">`CollectState()`</span>, it is not handed over by the environment in the same way it would in a classical MDP scenario. This may seem cumbersome, but it becomes handy when you have different agents in the scene, each one recording different values from the environment. Essentially allowing for different MDPs to be created from a single environment. It also allows the agent to pick and choose whichever elements from the environment it wants, and leave out other parts it considers irrelevant. The function <span style="color:blue">`CollectState()`</span> is defined by the user.
 
-The reward is then collected by the <span style="color:green">brain</span> function <span style="color:green">`CollectRewards()`</span> which merely retreives the value inside the <span style="color:blue">agent</span> variable <span style="color:blue">`agent.reward`</span>, computed in the previous iteration. Recall that <span style="color:blue">`agent.reward`</span> is set to `0` inside <span style="color:red">`Step()`</span>. Now we have a state-reward pair $$ (s_t, r_t) $$ and we are ready to use the policy $$ \pi $$ to compute the next action!
+The reward for that timestep is then collected by the <span style="color:green">brain</span> function <span style="color:green">`CollectRewards()`</span> which merely retreives the value inside the <span style="color:blue">agent</span> variable <span style="color:blue">`agent.reward`</span>, computed in the previous iteration. Recall that <span style="color:blue">`agent.reward`</span> is set to `0` inside <span style="color:red">`Step()`</span>. Don't forget that the reward is only reset when it's time to decide on a new action to take. Now we have a state-reward pair $$ (s_t, r_t) $$ and we are ready to use the policy $$ \pi $$ to compute the next action!
 
-<figure class="image-left">
-    <img class="resizedImage" src="{{ site.baseurl }}/assets/img/posts/agent-box.png" alt="my alt text"/>
+<div class="centerfigure">
+<figure>
+    <img src="{{ site.baseurl }}/assets/img/posts/agent-box.png" alt="my alt text"/>
+    <figcaption> The agent decides on an action by sampling from its policy.</figcaption>
 </figure>
-We now move to the left hand side box of the MDP diagram, the one containing the <span style="color:blue">agent's</span> policy. We want to sample the next action to be taken: $$ a_{t+1} \sim \pi(s_t) $$. This process begins with the <span style="color:red">`academy`</span> invoking the <span style="color:red">`DecideAction()`</span> function. This call triggers a further call to the <span style="color:green">brain</span>'s <span style="color:green">`DecideAction()`</span> function whose implementation, again, depends on the type of `CoreBrain`. For `External`, the action $$a_t$$ is retrieved from an external process to which Unity has given the current state $$s_t$$, reward $$r_t$$ and other meaningful environment information. For `Internal`, Unity takes the current state $$s_t$$ and inputs it to a trained TensorFlow model. After running a forward pass through the model, the action $$a_t$$ is sampled from the output layer of the model (Assumming the model is a neural network). Finally, for a `Player` `CoreBrain`, the action is taken directly from user input, simples!.
+</div>
 
-By now we have essentially sampled an action from the agent's policy, $$ a_{t+1} \sim \pi(s_t) $$. The sampled action is sent from the <span style="color:green">brain</span> to the <span style="color:blue">agent</span> by calling <span style="color:green">`SendAction()`</span>, which invokes <span style="color:blue">`UpdateAction()`</span> storing the action inside the <span style="color:blue">`agent.StoredAction`</span> property. This property will serve as input to <span style="color:blue">`AgentStep()`</span>, but let's not get ahead of ourselves.
+We now move to the left hand side box of the MDP diagram, the one containing the <span style="color:blue">agent's</span> policy. We want to sample the next action to be taken: $$ a_t \sim \pi(s_t) $$. This process begins with the <span style="color:red">`academy`</span> invoking the <span style="color:red">`DecideAction()`</span> function. This call triggers a further call to the <span style="color:green">brain</span>'s <span style="color:green">`DecideAction()`</span> function whose implementation, again, depends on the type of `CoreBrain`. For `External`, the action $$a_t$$ is retrieved from an external process to which Unity has given the current state $$s_t$$, reward $$r_t$$ among other meaningful environment information. For `Internal`, Unity takes the current state $$s_t$$ and inputs it to a trained TensorFlow model. After running a forward pass through the model, the action $$a_t$$ is sampled from the output layer of the model (Assumming the model is a neural network). Finally, for a `Player` `CoreBrain`, the action is taken directly from user input, simples!.
 
-<figure class="image-right">
+By now we have essentially sampled an action from the agent's policy, $$ a_t \sim \pi(s_t) $$. The sampled action is sent from the <span style="color:green">brain</span> to the <span style="color:blue">agent</span> by calling <span style="color:green">`SendAction()`</span>, which invokes <span style="color:blue">`UpdateAction()`</span> storing the action inside the <span style="color:blue">`agent.StoredAction`</span> property. This property will serve as input to <span style="color:blue">`AgentStep()`</span>, but let's not get ahead of ourselves.
+
+<div class="centerfigure">
+<figure >
     <img src="{{ site.baseurl }}/assets/img/posts/environment-box.png" alt="my alt text"/>
-    <figcaption ></figcaption>
+    <figcaption> Based on its current state and the agent's next action, the environment transitions to a new state and computes a reward based on these three elements.</figcaption>
 </figure>
-We now arrive at the right hand side box of the classical MDP diagram, the one that samples an state $$ s_{t+1} $$ from the transition probability function $$P$$ and calculates a reward $$r_{t+1}$$ using $$R$$. The last piece of the puzzle.
+</div>
+We now arrive at the right hand side box of the classical MDP diagram, the one that samples an state $$ s_{t+1} $$ from the transition probability function $$P$$ and calculates a reward $$r_{t+1}$$ using the reward function $$R$$. The last piece of the puzzle.
 
-It isn't until now that the user (you) has some agency over the architechture of the MDP. It is now the turn of the user defined <span style="color:red">`AcademyStep()`</span> function. What is it's purpose? Well, the <span style="color:red">`AcademyStep()`</span> function should be use as part of the transition probability function $$ P(s_{t+1} \mid s_t, a_t) $$. It should encapsulate the part of the transition $$ s_t \to s_{t+1} $$ which is independent of the action $$a_t$$, whatever $$a_t$$ may be. The part of the transition that depends on $$a_t$$ should be encapsulated inside <span style="color:blue">`AgentStep()`</span>.
+Let's go back to the the code snippet from <span style="color:red">`Academy.cs`</span> featuring the function <span style="color:red">`RunMdp()`</span>. After the `if` statement, the function <span style="color:red">`AcademyStep()`</span> is invoked, followed by a call to <span style="color:green">`Step()`</span>. Trust me when I say that <span style="color:green">`Step()`</span> eventually reaches a call to the user defined <span style="color:blue">`AgentStep()`</span> with $$a_t$$ as an input. These two functions are the Unity ML-agents equivalent of the transition probability function $$P$$. 
 
+The behaviour and implementation of the transition probabillity function $$P$$ is split between the two user defined functions <span style="color:red">`AcademyStep()`</span> and <span style="color:blue">`AgentStep()`</span>. These functions preceed one another. First, <span style="color:red">`AcademyStep()`</span> is called, then <span style="color:blue">`AgentStep()`</span> follows. <span style="color:red">`AcademyStep()`</span> should handle the changes of the transition from state $$s_t$$ to $$s_{t+1}$$ that are independent from the action $$a_t$$. This is because <span style="color:red">`AcademyStep()`</span> has no access to $$a_t$$. The part of the transition that depends on $$a_t$$ should be encapsulated inside <span style="color:blue">`AgentStep()`</span>. 
 
- Here lies a conceptual difference between the classical MDP definition and Unity's take on it. On the classical MDP definition, the agent sends an action $$ a_t $$ to the environment, and the environment carries $$ a_t$$ out, calculating the reward associated to it. In Unity, this task corresponds to the <span style="color:blue">agent</span>. Specifically, it corresponds to the user defined function  <span style="color:blue">`AgentStep()`</span>.
+Here lies a conceptual difference between the classical MDP definition and Unity's take on it. On the classical MDP definition, the agent sends an action $$ a_t $$ to the environment, and the environment carries $$ a_t$$ out, calculating the reward associated to it. In Unity, this task partially corresponds to the <span style="color:blue">agent</span>. Specifically, it corresponds to the user defined function  <span style="color:blue">`AgentStep()`</span>.
 
-{% highlight c# %}
+Finally, the behaviour and implementation of the reward function $$R$$ follows a similar approach to the transition probability function $$P$$. It lives in both <span style="color:red">`AcademyStep()`</span> and <span style="color:blue">`AgentStep()`</span>. The part of the reward that depends purely on state $$s_t$$ should stay inside <span style="color:red">`AcademyStep()`</span>. The behaviour that is dependent on $$a_t$$ can be implemented anywhere inside <span style="color:blue">`AgentStep()`</span>. Lastly, there may be some part of the reward function dependent on the resulting state $$s_{t+1}$$ that originates after performing action $$a_t$$ on state $$s_t$$. This part of the reward function should still be implemented inside <span style="color:blue">`AgentStep()`</span>, after all the code that deals with the probability transition function $$P$$ is executed. Any reward modification should increase or decrease the value inside <span style="color:blue">`agent.reward`</span>.
 
-public virtual void AgentStep(float[] action)
-{
-    // Logic for:
-    //       - Transition Function P
-    //       - Reward Function R
-}
+Unity allows the user to implement the transition probability and reward functions anywhere in the code. Let's say that, inside <span style="color:blue">`CollectState()`</span>, the agent records the coordinates of all objects in the scene. On top of that, let these objects move according whatever behaviour that lives inside their own `FixedUpdate()` method. This means that the behaviour of the transition function $$P$$ is not fully encapsulated inside <span style="color:red">`RunMdp()`</span>. Even though this is fine for most scenarios, it makes model-based RL or search-based algorithms much more complicated. Especially for the latter, as these algorithms rely on having a model that they can use to simulate the environment really fast. A model is no more than both $$P$$ and $$R$$ functions. If the behaviour of the environment lives somewhere in the code whose behaviour cannot be simulated quickly, then all our favourite MCTS algorithms are useless! The same could be said about the reward function $$R$$.
 
-{% endhighlight %}
-
+## Conclusion
 
 Here's a similar diagram analogous to the classical MDP one presented above, but with color coded function calls instead of mathematical operations. If you've understood the contents of this article, hopefully you can use this final diagram for your future work with the **fun**tastic Unity ML-agents module!
 
 ![unity-rl-loop]({{ site.baseurl}}/assets/img/posts/unity-rl-loop.png)
-
-## Bonus: Some questions and some answers.
-
-Here are some questions that came through my head as I was doing the research for this article.
-#### *Why is the reward stored in a class field and the state is retreived from a function?*
-
-If we the <span style="color:green">`Brain`</span> sent a decision (an action) to the <span style="color:blue">`Agent`</span> at every timestep, then it could make sense to either keep both reward and state as a class field, or both as a function. It isn't a good coding practice to keep two concepts at the same conceptual level at different levels of accessibility (fix). However, notice that the brain function <span style="color:green">`Step()`</span> is called regardless of whether there is a new action to be carried out. This means that an action needs to be taken at every timestep. Therefore it makes sense to keep the reward as a field, which we add to after performing an action on every frame: <span style="color:blue">agent.reward</span> += $$\mathbb{R}(s_t, a_t, s_{t+1}) $$. (specify that the state only needs to be collected on demand, thus keeping in in a function makes more sense that changing the value of a field on evey frame?)
-
-
-## Notes
-* I like the fact that for a Player Core Brain, the agent's function CollectState() is completely ignored
-* The reward function and the reward transition function lives inside <span style="color:blue">`AgentStep()`</span>.
-* The transition function $$ P(s_{t+1} \mid s_t, a_t) $$ lives partially in <span style="color:red">`AcademyStep()`</span> and <span style="color:blue">`AgentStep()`</span>. This isn't ideal.
-* The reward function $$ R(s_t, a_t, s_{t+1}) $$ should live inside <span style="color:blue">`AgentStep()`</span>.
-* The action is computed, but not executed. It is up to the user to implemnt AgentStep in such a way that the action is executed in the environment.

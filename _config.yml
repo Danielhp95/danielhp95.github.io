@@ -15,8 +15,8 @@ theme_settings:
 
   # Header and footer text
   header_text: > #two or three lines to describe your site
-     <p>Change header text in <code>_config.yml</code> <br> to update this feature.</p>
-  header_text_feature_image: assets/img/pexels/triangular.jpeg
+     <p>A website where a PhD student talks about his journey in a field of Reinforcement Learning and game AI in general</p>
+  header_text_feature_image: assets/img/pexels/polygon.jpg
   footer_text: >
    I must thank <a href="https://jekyllrb.com/">Jekyll</a> and <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>.
 
