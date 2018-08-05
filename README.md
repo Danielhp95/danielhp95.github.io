@@ -1,4 +1,3 @@
-# HANUMAN Jekyll Theme
 
 Useful resource in jekyll
 
