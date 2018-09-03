@@ -1,1 +1,4 @@
 https://devhints.io/jekyll
+
+How to build site:
+    bundle jekyll build

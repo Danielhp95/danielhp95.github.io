@@ -1,1 +1,6 @@
 _site/
+site/
+
+# VIM: Swap-files
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
