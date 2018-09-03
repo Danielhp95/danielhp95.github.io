@@ -27,8 +27,9 @@ def append_post_metadata_to_post_file(filePath, title=None, tags=[], layout='pos
     append_to_file(filePath, headers)
 
 
-def create_markdown_file_from_tex(textFilePath, markdownTargetFilePath):
-    pypandoc.convert_file(textFilePath, "markdown", outputfile=markdownTargetFilePath)
+def create_markdown_file_from_tex(textFilePath, markdownTargetFilePath, bibliographyPath):
+    bibliographyArg = ['--bibliography={}'.format(bibliographyPath)]
+    pypandoc.convert_file(textFilePath, "markdown", outputfile=markdownTargetFilePath, extra_args=bibliographyArg)
 
 
 # TODO.   Find way of reading whole content to file and parse strings accordingly (or literally call a one liner for perll
@@ -41,10 +42,10 @@ def apply_regex_to_file(filePath, regex):
     call(['perl', '-pi', '-e', 's/(?<!\$)\$(?!\$)/\$\$/g', filePath])
 
 
-def create_new_post(textFilePath=None, postName=""):
+def create_new_post(textFilePath=None, postName="", bibliographyPath=None):
     newPostFilePath = '_posts/{}-{}-{}-{}.{}'.format(currentDate.year, currentDate.month, currentDate.day, postName, 'md')
 
-    create_markdown_file_from_tex(textFilePath, newPostFilePath)
+    create_markdown_file_from_tex(textFilePath, newPostFilePath, bibliographyPath)
 
     append_post_metadata_to_post_file(newPostFilePath, title=postName)
 
@@ -59,8 +60,8 @@ def get_current_date():
 
 
 if __name__ == '__main__':
-    if not (len(sys.argv) == 3):
+    if not (len(sys.argv) == 4):
         print("TODO: get better help")
-        print("First argument should be location of .tex file with post\nSecond argument should be name of post")
+        print("First argument should be location of .tex file with post\nSecond argument should be name of post\nThird argument should be bibliography file")
     else:
-        create_new_post(textFilePath=sys.argv[1], postName=sys.argv[2])
+        create_new_post(textFilePath=sys.argv[1], postName=sys.argv[2], bibliographyPath=sys.argv[3])
