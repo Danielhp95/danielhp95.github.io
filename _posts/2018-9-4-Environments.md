@@ -20,16 +20,16 @@ extensions are built. Table \[table:environments\] features all the
 environment models discussed in this section as well as their
 differences with respect with MDPs.
 
-    **Model**    Partial observability   Multi-agent    Multiple Reward functions   Delayed actions
-  ------------- ----------------------- -------------- --------------------------- -----------------
-      SMDP             $$\times$$            $$\times$$             $$\times$$             $$\checkmark$$
-      POMDP                                $$\times$$             $$\times$$               $$\times$$
-      MMDP             $$\times$$          $$\checkmark$$           $$\times$$               $$\times$$
-    dec-POMDP        $$\checkmark$$        $$\checkmark$$           $$\times$$               $$\times$$
-   Markov Game         $$\times$$          $$\checkmark$$         $$\checkmark$$             $$\times$$
+  **Model**    Partial observability   Multi-agent    Multiple Reward functions   Delayed actions
+------------- ----------------------- -------------- --------------------------- -----------------
+    SMDP             $$\times$$            $$\times$$             $$\times$$             $$\checkmark$$
+    POMDP                                $$\times$$             $$\times$$               $$\times$$
+    MMDP             $$\times$$          $$\checkmark$$           $$\times$$               $$\times$$
+  dec-POMDP        $$\checkmark$$        $$\checkmark$$           $$\times$$               $$\times$$
+ Markov Game         $$\times$$          $$\checkmark$$         $$\checkmark$$             $$\times$$
 
-  : Properties of various environment models with respect to classical
-  Markov Decission Processes.
+: Properties of various environment models with respect to classical
+Markov Decission Processes.
 
 \[table:environments\]
 
