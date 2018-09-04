@@ -2,7 +2,7 @@
 layout: post
 cover: assets/images/shiva.jpg
 title: Environments
-date: 2018-9-4 13:34:17
+date: 2018-9-4 14:48:15
 tags: []
 ---
 
@@ -285,6 +285,9 @@ be considered a normal-form game from game theory literature. Doning a
 game theory hat, $$\gamma$$ can be thought of as the probability of the
 game finishing next round. If all agents shared the same reward
 function, the Markov Game is reduced to an MMDP.
+
+Time for References!
+------------
 
 <div id="refs" class="references">
 
