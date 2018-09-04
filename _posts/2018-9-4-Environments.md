@@ -2,7 +2,7 @@
 layout: post
 cover: assets/images/shiva.jpg
 title: Environments
-date: 2018-9-4 0:30:17
+date: 2018-9-4 13:29:33
 tags: []
 ---
 
@@ -20,48 +20,49 @@ extensions are built. Table \[table:environments\] features all the
 environment models discussed in this section as well as their
 differences with respect with MDPs.
 
-  **Model**    Partial observability   Multi-agent    Multiple Reward functions   Delayed actions
-------------- ----------------------- -------------- --------------------------- -----------------
-    SMDP             $$\times$$            $$\times$$             $$\times$$             $$\checkmark$$
-    POMDP                                $$\times$$             $$\times$$               $$\times$$
-    MMDP             $$\times$$          $$\checkmark$$           $$\times$$               $$\times$$
-  dec-POMDP        $$\checkmark$$        $$\checkmark$$           $$\times$$               $$\times$$
- Markov Game         $$\times$$          $$\checkmark$$         $$\checkmark$$             $$\times$$
+    **Model**    Partial observability   Multi-agent    Multiple Reward functions   Delayed actions
+  ------------- ----------------------- -------------- --------------------------- -----------------
+      SMDP             $$\times$$            $$\times$$             $$\times$$             $$\checkmark$$
+      POMDP                                $$\times$$             $$\times$$               $$\times$$
+      MMDP             $$\times$$          $$\checkmark$$           $$\times$$               $$\times$$
+    dec-POMDP        $$\checkmark$$        $$\checkmark$$           $$\times$$               $$\times$$
+   Markov Game         $$\times$$          $$\checkmark$$         $$\checkmark$$             $$\times$$
 
-: Properties of various environment models with respect to classical
-Markov Decission Processes.
+  : Properties of various environment models with respect to classical
+  Markov Decission Processes.
 
 \[table:environments\]
 
 Semi Markov Decision Process (SMDP)
 -----------------------------------
 
-As stated in [@Barto2003], in an MDP, only the sequential nature of the
-decision process is relevant, not the amount of time that passes between
-decision points. Semi Markov Decision Processes are a generalization of
-this idea, where the time elapsed in between decision points, also known
-as decision stages, is taken into account. Every action taken in an SMDP
-has an assigned delay $$\tau$$, known as *holding time*. When an action
-with holding time $$\tau$$ is decided at time $$t$$, the agent waits for
-$$\tau$$ timesteps before the action is executed and the next decision
-point is reached. At this decision point, the agent recieves state $$s`$$
-and a cumulative reward which includes the individual reward of all
-elapsed timesteps, $$r = \sum_{l=t}^{t+\tau}r_{t+l}$$. The time until the
-next decision point $$\tau$$ can only depend on the action $$a$$ and state
-$$t$$ and thus $$\tau$$ is independent of the history of the environment.
-SMDPs can also be used for real-valued time systems instead of
-discretely timed environments. This holding time allows for a gap in
-time between sensorial input reaching the agent and the agent’s action
-being executed on the environment. This type of process is considered
-Semi Markovian because as the holding time is elapsing, the agent cannot
-know how the system is evolving. Thus, in order to determine when the
-next state (decision point) will be reached, it is necessary to know how
-much time has elapsed, introducing temporal dependency, breaking the
-Markov property. To iterate on this point, the probability of reaching
-state state $$s_{t+\tau}$$ depends only on $$s_t$$ and action $$a_t$$ with
-associated holding time $$\tau$$. Once the action $$a_t$$ has been decided,
-estimating when the agent will recieve state $$s_{t+\tau}$$ depends on how
-much time has elapsed since the action $$a_t$$ was decided.
+As stated in (A. G. Barto 2003), in an MDP, only the sequential nature
+of the decision process is relevant, not the amount of time that passes
+between decision points. Semi Markov Decision Processes are a
+generalization of this idea, where the time elapsed in between decision
+points, also known as decision stages, is taken into account. Every
+action taken in an SMDP has an assigned delay $$\tau$$, known as *holding
+time*. When an action with holding time $$\tau$$ is decided at time $$t$$,
+the agent waits for $$\tau$$ timesteps before the action is executed and
+the next decision point is reached. At this decision point, the agent
+recieves state $$s`$$ and a cumulative reward which includes the
+individual reward of all elapsed timesteps,
+$$r = \sum_{l=t}^{t+\tau}r_{t+l}$$. The time until the next decision point
+$$\tau$$ can only depend on the action $$a$$ and state $$t$$ and thus $$\tau$$
+is independent of the history of the environment. SMDPs can also be used
+for real-valued time systems instead of discretely timed environments.
+This holding time allows for a gap in time between sensorial input
+reaching the agent and the agent’s action being executed on the
+environment. This type of process is considered Semi Markovian because
+as the holding time is elapsing, the agent cannot know how the system is
+evolving. Thus, in order to determine when the next state (decision
+point) will be reached, it is necessary to know how much time has
+elapsed, introducing temporal dependency, breaking the Markov property.
+To iterate on this point, the probability of reaching state state
+$$s_{t+\tau}$$ depends only on $$s_t$$ and action $$a_t$$ with associated
+holding time $$\tau$$. Once the action $$a_t$$ has been decided, estimating
+when the agent will recieve state $$s_{t+\tau}$$ depends on how much time
+has elapsed since the action $$a_t$$ was decided.
 
 A Semi Markov Decision Process is defined by a 5-element tuple
 $$(\mathcal{S}, \mathcal{A}, \mathcal{P}(\cdot, \cdot | \cdot, \cdot), \mathcal{R}(\cdot, \cdot, \cdot, \cdot), \gamma)$$:
@@ -81,10 +82,10 @@ $$(\mathcal{S}, \mathcal{A}, \mathcal{P}(\cdot, \cdot | \cdot, \cdot), \mathcal{
     state $$s'$$.
 
 A useful properties of SMDPs is that they can be reduced to regular MDPs
-through the *data-transformation method* [@Piunovskiy2012]. This
-introduces the possibility of using MDP solving methods to solve SMDPs.
-SMDPs have recieved a lot of attention in the field hierarchical
-learning, especially with regards to options [@Sutton1998].
+through the *data-transformation method* (Piunovskiy and Zhang 2012).
+This introduces the possibility of using MDP solving methods to solve
+SMDPs. SMDPs have recieved a lot of attention in the field hierarchical
+learning, especially with regards to options (Sutton and Barto 1998).
 
 Partially Observable Markov Decision Process (POMDP)
 ----------------------------------------------------
@@ -139,7 +140,7 @@ environments. Agents must be considered as non-stationary parts of the
 environment, because the policies that define their behaviours change
 over time through the course of learning.
 
- [@Boutilier1996] introduces Multi-agent Markov Decision Processes
+ (Boutilier 1996) introduces Multi-agent Markov Decision Processes
 (MMDPs) as framework to study coordination mechanisms. In contrast of
 MDPs, MMDPs feature multiple agent policies, each of them submitting an
 individual action every timestep.
@@ -169,20 +170,20 @@ Decentralized Markov Decision Process (dec-POMDP)
 -------------------------------------------------
 
 Dec-POMDPs form a framework for multiagent planning under
-uncertainty [@Oliehoek2014]. This uncertainy comes from two sources. The
-first one being the partial observability of the environment, the second
-one stemming from the uncertainy that each agent has over the other
-agent’s policies. It is the natural multi-agent generalization of
-POMDPs, introducing multi-agent concepts from game theory. They are
-considereded *decentralized* because there is no explicit communication
-between agents. Agents do not have the explicit ability of sharing their
-observations and action choices with each other. Every agent bases its
-decision purely on its individual observations. On every timestep each
-agent chooses an action simultaneously and they are all collectively
-submitted to the environment. As in MMDPs, all agents share the same
-reward function, making the nature of dec-POMDPs collaborative. A
-decentralized Partially Observable Markov Decision Process is defined by
-an 8-element tuple
+uncertainty (Oliehoek and Amato 2014). This uncertainy comes from two
+sources. The first one being the partial observability of the
+environment, the second one stemming from the uncertainy that each agent
+has over the other agent’s policies. It is the natural multi-agent
+generalization of POMDPs, introducing multi-agent concepts from game
+theory. They are considereded *decentralized* because there is no
+explicit communication between agents. Agents do not have the explicit
+ability of sharing their observations and action choices with each
+other. Every agent bases its decision purely on its individual
+observations. On every timestep each agent chooses an action
+simultaneously and they are all collectively submitted to the
+environment. As in MMDPs, all agents share the same reward function,
+making the nature of dec-POMDPs collaborative. A decentralized Partially
+Observable Markov Decision Process is defined by an 8-element tuple
 $$(I, \mathcal{S}, \mathcal{A}_{1..k}, \mathcal{P}(\cdot | \cdot, \cdot), \mathcal{R}(\cdot, \cdot), \Omega_{1..k}, \mathcal{O(\cdot | \cdot, \cdot)}, H)$$:
 
 -   $$\mathcal{S}$$ expresses the same concepts as in classical MDPs.
@@ -231,16 +232,16 @@ $$(I, \mathcal{S}, \mathcal{A}_{1..k}, \mathcal{P}(\cdot | \cdot, \cdot), \mathc
 A dec-POMDP featuring a single agent, $$|I| = 1$$, can be treated as a
 POMDP. Furthermore, when agents are permitted to have different reward
 functions, this model becomes a Partially Observable Stochastic Game
-(POSG) [@Hansen2004].
+(POSG) ([**???**]{.citeproc-not-found data-reference-id="Hansen2004"}).
 
 Markov Game
 -----------
 
- [@Owen1982] first introduced the notion of a Markov Game. Markov Games
-also serve to model multi-agent environments. They came to be as a
-crossbreed between game theoretic structures such as extended-form games
-and Markov Decision Processes. A Markov Game with $$k$$ different agents
-is denoted by a 5-element tuple
+ (Owen and Owen 1982) first introduced the notion of a Markov Game.
+Markov Games also serve to model multi-agent environments. They came to
+be as a crossbreed between game theoretic structures such as
+extended-form games and Markov Decision Processes. A Markov Game with
+$$k$$ different agents is denoted by a 5-element tuple
 $$(\mathcal{S}, {\mathcal{A}_{1..k}}, \mathcal{P}(\cdot | \cdot, \cdot), {\mathcal{R}_{1..k}(\cdot, \cdot)}, \gamma)$$
 
 -   $$\mathcal{S}$$ and $$\gamma$$ express the same concepts as classical
@@ -270,13 +271,13 @@ cumulative reward,
 $$\mathbb{E}[\sum_{j=0}^{\infty} \gamma^{j} r_{i,t+j}]$$, where
 $$r_{i, t+j}$$ is the reward obtained by agent $$i$$ at time $$t+j$$.
 
-Markov Games have several important
-properties [@Owen1982; @Littman1994]. Like MDP’s, Every Markov game
-features an optimal policy for each agent. Unlike MDPs, these policies
-may be *stochastic*. The need for stochastic action choice stems from
-the agent’s uncertainty about the opponent’s pending moves. On top of
-this, sthocastic policies make it difficult for opponents to “second
-guess” the agent’s action, which makes the policy less exploitable.
+Markov Games have several important properties (Owen and Owen 1982;
+Littman 1994). Like MDP’s, Every Markov game features an optimal policy
+for each agent. Unlike MDPs, these policies may be *stochastic*. The
+need for stochastic action choice stems from the agent’s uncertainty
+about the opponent’s pending moves. On top of this, sthocastic policies
+make it difficult for opponents to “second guess” the agent’s action,
+which makes the policy less exploitable.
 
 When the number of agents in a Markov Game is exactly 1, the Markov Game
 can be considered an MDP. When $$|\mathcal{S}| = 1$$, the environment can
@@ -284,6 +285,36 @@ be considered a normal-form game from game theory literature. Doning a
 game theory hat, $$\gamma$$ can be thought of as the probability of the
 game finishing next round. If all agents shared the same reward
 function, the Markov Game is reduced to an MMDP.
+
+Barto, Andrew G. 2003. “Recent Advances in Hierarchical Reinforcement
+Learning Markov and Semi-Markov Decision Processes.” *Most* 13 (5):
+1–28. doi:[10.1.1.4.6238-1](https://doi.org/10.1.1.4.6238-1).
+
+Boutilier, Craig. 1996. “Planning, learning and coordination in
+multiagent decision processes.” *Proceedings of the 6th Conference on
+Theoretical Aspects of Rationality and Knowledge*, 195–210.
+<http://dl.acm.org/citation.cfm?id=1029710>.
+
+Littman, Michael L. 1994. “Markov games as a framework for multi-agent
+reinforcement learning.” *Machine Learning Proceedings 1994*, 157–63.
+doi:[10.1016/B978-1-55860-335-6.50027-1](https://doi.org/10.1016/B978-1-55860-335-6.50027-1).
+
+Oliehoek, Frans A, and Christopher Amato. 2014. “Best Response Bayesian
+Reinforcement Learning for Multiagent Systems with State Uncertainty.”
+*AAMAS Workshop on Multiagent Sequential Decision Making Under
+Uncertainty, MSDM 2014*, no. May.
+
+Owen, G, and G Owen. 1982. “Game Theory.” *Collection*.
+doi:[10.4135/9781412984317](https://doi.org/10.4135/9781412984317).
+
+Piunovskiy, Alexey, and Yi Zhang. 2012. “The Transformation Method for
+Continuous-Time Markov Decision Processes.” *Journal of Optimization
+Theory and Applications* 154 (2): 691–712.
+doi:[10.1007/s10957-012-0015-8](https://doi.org/10.1007/s10957-012-0015-8).
+
+Sutton, Richard S., and Andrew G. Barto. 1998. *Reinforcement Learning:
+An Introduction*.
+doi:[10.1109/TNN.1998.712192](https://doi.org/10.1109/TNN.1998.712192).
 
 [^1]: It is not common to explicitly statea policy or a set of policies
     as part of the environment definition. However, this is how
