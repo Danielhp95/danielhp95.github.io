@@ -29,7 +29,7 @@ def append_post_metadata_to_post_file(filePath, title=None, tags=[], layout='pos
 
 def create_markdown_file_from_tex(textFilePath, markdownTargetFilePath, bibliographyPath):
     bibliographyArg = ['--bibliography={}'.format(bibliographyPath)]
-    pypandoc.convert_file(textFilePath, "markdown", outputfile=markdownTargetFilePath, extra_args=bibliographyArg)
+    pypandoc.convert_file(textFilePath, "markdown-citations", outputfile=markdownTargetFilePath, extra_args=bibliographyArg)
 
 
 # TODO.   Find way of reading whole content to file and parse strings accordingly (or literally call a one liner for perll

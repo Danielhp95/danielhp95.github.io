@@ -2,7 +2,7 @@
 layout: post
 cover: assets/images/shiva.jpg
 title: Environments
-date: 2018-9-4 13:29:33
+date: 2018-9-4 13:34:17
 tags: []
 ---
 
@@ -286,35 +286,67 @@ game theory hat, $$\gamma$$ can be thought of as the probability of the
 game finishing next round. If all agents shared the same reward
 function, the Markov Game is reduced to an MMDP.
 
+<div id="refs" class="references">
+
+<div id="ref-Barto2003">
+
 Barto, Andrew G. 2003. “Recent Advances in Hierarchical Reinforcement
 Learning Markov and Semi-Markov Decision Processes.” *Most* 13 (5):
 1–28. doi:[10.1.1.4.6238-1](https://doi.org/10.1.1.4.6238-1).
+
+</div>
+
+<div id="ref-Boutilier1996">
 
 Boutilier, Craig. 1996. “Planning, learning and coordination in
 multiagent decision processes.” *Proceedings of the 6th Conference on
 Theoretical Aspects of Rationality and Knowledge*, 195–210.
 <http://dl.acm.org/citation.cfm?id=1029710>.
 
+</div>
+
+<div id="ref-Littman1994">
+
 Littman, Michael L. 1994. “Markov games as a framework for multi-agent
 reinforcement learning.” *Machine Learning Proceedings 1994*, 157–63.
 doi:[10.1016/B978-1-55860-335-6.50027-1](https://doi.org/10.1016/B978-1-55860-335-6.50027-1).
+
+</div>
+
+<div id="ref-Oliehoek2014">
 
 Oliehoek, Frans A, and Christopher Amato. 2014. “Best Response Bayesian
 Reinforcement Learning for Multiagent Systems with State Uncertainty.”
 *AAMAS Workshop on Multiagent Sequential Decision Making Under
 Uncertainty, MSDM 2014*, no. May.
 
+</div>
+
+<div id="ref-Owen1982">
+
 Owen, G, and G Owen. 1982. “Game Theory.” *Collection*.
 doi:[10.4135/9781412984317](https://doi.org/10.4135/9781412984317).
+
+</div>
+
+<div id="ref-Piunovskiy2012">
 
 Piunovskiy, Alexey, and Yi Zhang. 2012. “The Transformation Method for
 Continuous-Time Markov Decision Processes.” *Journal of Optimization
 Theory and Applications* 154 (2): 691–712.
 doi:[10.1007/s10957-012-0015-8](https://doi.org/10.1007/s10957-012-0015-8).
 
+</div>
+
+<div id="ref-Sutton1998">
+
 Sutton, Richard S., and Andrew G. Barto. 1998. *Reinforcement Learning:
 An Introduction*.
 doi:[10.1109/TNN.1998.712192](https://doi.org/10.1109/TNN.1998.712192).
+
+</div>
+
+</div>
 
 [^1]: It is not common to explicitly statea policy or a set of policies
     as part of the environment definition. However, this is how
