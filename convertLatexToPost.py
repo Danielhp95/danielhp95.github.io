@@ -6,6 +6,13 @@ currentDate = datetime.datetime.now()
 from subprocess import call
 
 
+def get_current_date():
+    date = '{}-{}-{} {}:{}:{}'.format(currentDate.year, currentDate.month, \
+                                      currentDate.day, currentDate.hour, \
+                                      currentDate.minute, currentDate.second)
+    return date
+
+
 def append_to_file(filePath, string):
     with open(filePath, 'r+') as f:
         content = f.read()
@@ -34,12 +41,23 @@ def create_markdown_file_from_tex(textFilePath, markdownTargetFilePath, bibliogr
 
 # TODO.   Find way of reading whole content to file and parse strings accordingly (or literally call a one liner for perll
 def fix_formating_mathjax_equations(filePath):
-    regex = '(?<!\$)\$(?!\$)'
+    regex = 's/(?<!\$)\$(?!\$)/\$\$/g'
     apply_regex_to_file(filePath, regex)
 
 
 def apply_regex_to_file(filePath, regex):
-    call(['perl', '-pi', '-e', 's/(?<!\$)\$(?!\$)/\$\$/g', filePath])
+    call(['perl', '-pi', '-e', regex, filePath])
+
+
+def add_reference_text_to_references(filePath):
+    reference_markdown_text = 'Time for References!\n------------\n\n'
+    reference_line = "<div id=\"refs\" class=\"references\">\n"
+    with open(filePath, "r") as f:
+        contents = f.readlines()
+    references_index = contents.index(reference_line)
+    contents.insert(references_index, reference_markdown_text)
+    with open(filePath, "w+") as f:
+        f.writelines(contents)
 
 
 def create_new_post(textFilePath=None, postName="", bibliographyPath=None):
@@ -51,12 +69,7 @@ def create_new_post(textFilePath=None, postName="", bibliographyPath=None):
 
     fix_formating_mathjax_equations(newPostFilePath)
 
-
-def get_current_date():
-    date = '{}-{}-{} {}:{}:{}'.format(currentDate.year, currentDate.month, \
-                                      currentDate.day, currentDate.hour, \
-                                      currentDate.minute, currentDate.second)
-    return date
+    add_reference_text_to_references(newPostFilePath)
 
 
 if __name__ == '__main__':
