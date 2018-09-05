@@ -20,6 +20,15 @@ extensions are built. Table \[table:environments\] features all the
 environment models discussed in this section as well as their
 differences with respect with MDPs.
 
+
++---------+----------+
+| Name    | Columns  |
++=========+==========+
+| PRIMARY | - id one |
+|         | - id two |
++---------+----------+
+
+
     **Model**    Partial observability   Multi-agent    Multiple Reward functions   Delayed actions
   ------------- ----------------------- -------------- --------------------------- -----------------
       SMDP             $$\times$$            $$\times$$             $$\times$$             $$\checkmark$$
