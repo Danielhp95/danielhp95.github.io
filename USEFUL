@@ -1,4 +1,4 @@
 https://devhints.io/jekyll
 
 How to build site:
-    bundle jekyll build
+    bundle exec jekyll build
