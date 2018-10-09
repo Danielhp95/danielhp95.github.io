@@ -1,10 +1,11 @@
 import pypandoc
 import sys
-import datetime
-currentDate = datetime.datetime.now()
-
 from subprocess import call
 
+from docopt import docopt
+
+import datetime
+currentDate = datetime.datetime.now()
 
 def get_current_date():
     date = '{}-{}-{} {}:{}:{}'.format(currentDate.year, currentDate.month, \
@@ -35,7 +36,7 @@ def append_post_metadata_to_post_file(filePath, title=None, tags=[], layout='pos
 
 
 def create_markdown_file_from_tex(textFilePath, markdownTargetFilePath, bibliographyPath):
-    bibliographyArg = ['--bibliography={}'.format(bibliographyPath)]
+    bibliographyArg = [] # ['--bibliography={}'.format(bibliographyPath)]
     pypandoc.convert_file(textFilePath, "markdown-citations", outputfile=markdownTargetFilePath, extra_args=bibliographyArg)
 
 
@@ -69,12 +70,25 @@ def create_new_post(textFilePath=None, postName="", bibliographyPath=None):
 
     fix_formating_mathjax_equations(newPostFilePath)
 
-    add_reference_text_to_references(newPostFilePath)
+    #add_reference_text_to_references(newPostFilePath)
 
 
 if __name__ == '__main__':
-    if not (len(sys.argv) == 4):
-        print("TODO: get better help")
-        print("First argument should be location of .tex file with post\nSecond argument should be name of post\nThird argument should be bibliography file")
-    else:
-        create_new_post(textFilePath=sys.argv[1], postName=sys.argv[2], bibliographyPath=sys.argv[3])
+    #_USAGE = '''
+    #Usage:
+    #    convertolatex  --source-latex-file=<file> --destination-markdown-file=<file> [--bibtex-file=<file>]
+    #    convertolatex --help
+
+    #Options:
+    #    --source-latex-file=<file>             Name of the *.tex file containing the source material [default:None]
+    #    --destination-markdown-file=<file2>    Name of the new file containing the markdown blogpost [default:None]
+    #    --bibtex-file=<file3>                  Bibtex file used to cite references [default:None]
+    #'''
+    #options = docopt(_USAGE)
+    #print("help")
+    #if options['--source-latex-file'] is None or options['--destination-markdown-file'] is None:
+    #    print("inside if")
+    #    print(options['--help'])
+    #else: 
+    #    print("past if")
+    create_new_post(textFilePath=sys.argv[1], postName=sys.argv[2], bibliographyPath=sys.argv[3])
