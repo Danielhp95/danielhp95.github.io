@@ -9,7 +9,7 @@ permalink: /private-links/
 ## Active projects
 
 #### Self-play paper: 
-+ Link: [pdf link]({{ site.baseurl }}/assets/pdfs/self-play.pdf)
++ Overleaf link: [overleaf link](https://www.overleaf.com/read/rvhjspdrrbsg)
 + Intended Submission for IJCAI 2019. Deadline 25th February.
 
 #### ICRA 2019 submission: 
