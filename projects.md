@@ -18,15 +18,18 @@ permalink: /private-links/
 
 ## Finished projects
 
-#### IGGI 2018 Unity ML-agents workshop: 
+#### Imperial College MCTS talk 'n' tutorial (2018): 
++ Links: [github page](https://github.com/Danielhp95/ai-in-games-mcts) and [slides]({{ site.baseurl }}/assets/pdfs/MCTS-imperial-slides.pdf))
+
+#### IGGI 2018 Unity ML-agents workshop (2018): 
 
 + Links: [github page (workshop branch)](https://github.com/Danielhp95/ml-agents/tree/develop-self-play-workshop) and [slides](https://docs.google.com/presentation/d/1ugIoVUR6NIfCfb8fKLcX9Tt82qaMulFjtaZbcoEiX0A/edit?usp=sharing)
 
-#### MCTS workshop in Spain:
+#### MCTS workshop in Spain (2018):
 + Link:  [github page](https://github.com/Danielhp95/taller-mcts-coruna)
 + Contents are in Spanish
 
-#### First Year Report:
+#### First Year Report (2018):
 + Link: [Report]({{ site.baseurl }}/assets/pdfs/first-year-report.pdf) and [Literature Review]({{ site.baseurl }}/assets/pdfs/literature-review.pdf)
 
 ### Side projects 
