@@ -1,4 +1,4 @@
----
+MCTS-Imperial-slides.pdf---
 layout: page
 title: Projects
 permalink: /private-links/
@@ -19,7 +19,7 @@ permalink: /private-links/
 ## Finished projects
 
 #### Imperial College MCTS talk 'n' tutorial (2018): 
-+ Links: [github page](https://github.com/Danielhp95/ai-in-games-mcts) and [slides]({{ site.baseurl }}/assets/pdfs/MCTS-imperial-slides.pdf))
++ Links: [github page](https://github.com/Danielhp95/ai-in-games-mcts) and [slides]({{ site.baseurl }}/assets/pdfs/MCTS-Imperial-slides.pdf)
 
 #### IGGI 2018 Unity ML-agents workshop (2018): 
 
