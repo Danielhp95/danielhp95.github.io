@@ -1,4 +1,4 @@
-MCTS-Imperial-slides.pdf---
+---
 layout: page
 title: Projects
 permalink: /private-links/
