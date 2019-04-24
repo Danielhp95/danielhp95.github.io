@@ -1,27 +1,17 @@
-# Site settings
 title: Reinforce my Learning
 description: 
 cover: assets/images/Wallpaper2.jpg
 logo: assets/images/logo2.png
 favicon: assets/images/favicon.png
 baseurl: "" # the subpath of your site, e.g. /blog/ or / for root
-# url: "https://samanyougarg.com" # the base hostname & protocol for your site
-paginate: 5 # The number of posts to show per page on your homepage 
-# Social
-# facebook: facebook
-# twitter: twitter
+paginate: 69 # The number of posts to show per page on your homepage 
 github:  Danielhp95
 
 #Additional Pages
 about: about
 # contact: contact LET'S INTRODUCE THIS AT SOME POINT
 
-
 permalink: /:title
-
-
-# Google Analytics
-# analytics_id: ""
 
 # Build settings
 markdown: kramdown
@@ -31,7 +21,6 @@ kramdown:
 
 plugins:
     - jekyll-paginate
-
 
 # Settings for rake task
 safe: False
