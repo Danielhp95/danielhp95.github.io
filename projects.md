@@ -8,20 +8,31 @@ permalink: /private-links/
 
 ## Active projects
 
+#### Atari.ai
+
+Demo module carried out during my 2nd year at IGGI
+
++ Link: [github page](https://github.com/Danielhp95/atar.ai) (Personal private repo. Currently only accessible by me)
+
+
+## Finished projects
+
+### 2019
+
 #### Self-play paper: 
-+ Overleaf link: [overleaf link](https://www.overleaf.com/read/rvhjspdrrbsg)
-+ Intended Submission for IJCAI 2019. Deadline 25th February.
++ Link: [pdf file]({{ site.baseurl }}/assets/pdfs/COG-2019-submission.pdf)
++ Submitted to COG 2019
+
+### 2018
 
 #### ICRA 2019 submission: 
 + Link: [pdf file]({{ site.baseurl }}/assets/pdfs/ICRA-2019-submission.pdf)
 + Reviews will come in January 10th.
 
-## Finished projects
-
-#### Imperial College MCTS talk 'n' tutorial (2018): 
+#### Imperial College MCTS talk 'n' tutorial: 
 + Links: [github page](https://github.com/Danielhp95/ai-in-games-mcts) and [slides]({{ site.baseurl }}/assets/pdfs/MCTS-Imperial-slides.pdf)
 
-#### IGGI 2018 Unity ML-agents workshop (2018): 
+#### IGGI 2018 Unity ML-agents workshop: 
 
 + Links: [github page (workshop branch)](https://github.com/Danielhp95/ml-agents/tree/develop-self-play-workshop) and [slides](https://docs.google.com/presentation/d/1ugIoVUR6NIfCfb8fKLcX9Tt82qaMulFjtaZbcoEiX0A/edit?usp=sharing)
 
@@ -32,7 +43,8 @@ permalink: /private-links/
 #### First Year Report (2018):
 + Link: [Report]({{ site.baseurl }}/assets/pdfs/first-year-report.pdf) and [Literature Review]({{ site.baseurl }}/assets/pdfs/literature-review.pdf)
 
-### Side projects 
+
+## Side projects 
 #### Maze RL benchmarker:
 + Link: [github page](https://github.com/Danielhp95/reinforcement-learning-path-finding-benchmarker)
 
@@ -42,4 +54,4 @@ permalink: /private-links/
 
 ##### Disclaimer
 
-This page is intended to be a place where I, Daniel Hernandez, keep links to the different research projects I am working on. For the eyes of myself and my supervision team only. Tresspassers will be prosecuted... somehow.
+This page is intended to be a place where I, Daniel Hernandez, keep links to the different research projects I am working on. For the eyes of myself and my supervision team only. Trespassers will be prosecuted... somehow.

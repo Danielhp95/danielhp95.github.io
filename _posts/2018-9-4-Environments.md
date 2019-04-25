@@ -1,9 +1,9 @@
 ---
 layout: post
 cover: assets/images/shiva.jpg
-title: Environments
+title: Environment models (Beyond Markov Decision Processes)
 date: 2018-9-4 14:48:15
-tags: []
+tags: [RL, RL-Environments]
 ---
 
 Even though Markov Decision Processes are the most famous mathematical
@@ -21,26 +21,15 @@ environment models discussed in this section as well as their
 differences with respect with MDPs.
 
 
-+---------+----------+
-| Name    | Columns  |
-+=========+==========+
-| PRIMARY | - id one |
-|         | - id two |
-+---------+----------+
+| Model       | Partial observability | Multiagent     | Multiple Reward Functions | Delayed Actions |
+|:------------|:---------------------:|:--------------:|:-------------------------:|:---------------:|
+|   SMDP      |       $$\times$$      |   $$\times$$   |         $$\times$$        | $$\checkmark$$  |
+|   POMDP     |       $$\checkmark$$  | $$\times$$     |       $$\times$$          | $$\times$$      |
+|   MMDP      |       $$\times$$      | $$\checkmark$$ |         $$\times$$        |   $$\times$$    |
+| dec-POMDP   |     $$\checkmark$$    | $$\checkmark$$ |         $$\times$$        |   $$\times$$    |
+| Markov Game |       $$\times$$      | $$\checkmark$$ |       $$\checkmark$$      |   $$\times$$    |
 
-
-    **Model**    Partial observability   Multi-agent    Multiple Reward functions   Delayed actions
-  ------------- ----------------------- -------------- --------------------------- -----------------
-      SMDP             $$\times$$            $$\times$$             $$\times$$             $$\checkmark$$
-      POMDP                                $$\times$$             $$\times$$               $$\times$$
-      MMDP             $$\times$$          $$\checkmark$$           $$\times$$               $$\times$$
-    dec-POMDP        $$\checkmark$$        $$\checkmark$$           $$\times$$               $$\times$$
-   Markov Game         $$\times$$          $$\checkmark$$         $$\checkmark$$             $$\times$$
-
-  : Properties of various environment models with respect to classical
-  Markov Decission Processes.
-
-\[table:environments\]
+<br/>
 
 Semi Markov Decision Process (SMDP)
 -----------------------------------
@@ -155,22 +144,20 @@ MDPs, MMDPs feature multiple agent policies, each of them submitting an
 individual action every timestep.
 
 A Multi-agent Markov Decission Process is defined by a 5-element tuple
-$$(\mathcal{S}, \mathcal{A_{1..k}}, \mathcal{P}(\cdot, \cdot | \cdot, \cdot), \mathcal{R}(\cdot, \cdot), \gamma)$$:
+$$(\mathcal{S}, \mathcal{A_{1..k}}, \mathcal{P}(\cdot | \cdot, \cdot), \mathcal{R}(\cdot, \cdot), \gamma)$$:
 
 -   $$\mathcal{S}, \mathcal{A}$$ and $$\gamma$$ express the same concepts as
     in classical MDPs.
 
--   $$\mathcal{P}(s' | s, a)$$
+-   $$\mathcal{A}_{1..k}$$ is a collection of action sets, one for each agent in the environment, with $$\mathcal{A}_i$$ corresponding to the action set of the $$i$$th agent.
 
--   $$\mathcal{A}_{1..k}$$ is a collection of action sets, one for each
-    agent in the environment, with $$\mathcal{A}_i$$ corresponding to the
-    action set of the $$i$$th agent.
+- $$\mathcal{P}(s' \mid s, \mathbf{a})$$, where $$s \in S$$, $$\mathbf{a} = \{a_1, \dots , a_k\}$$ and $$a_1 \in A_1, \dots , a_k \in A_k$$, represents the probability
+transition function. It states the probability of transitioning from state $$s$$ to state $$s'$$ after executing
+the joint action $$\mathbf{a}$$. The joint action, $$\mathbf{a}$$, is a vector containing the action performed by every agent at a given timestep
 
--   $$\mathcal{R}(s, a, s', \tau)$$, where
-    $$s',s \in \mathcal{S}, a \in \mathcal{A}$$, is the reward function.
-    It represents the expected reward of deciding on action $$a$$ on state
-    $$s$$ with an assigned holding time of $$\tau$$ timesteps and landing on
-    state $$s'$$.
+-   $$\mathcal{R}(s, a, s', \tau)$$, where $$s',s \in \mathcal{S}, a \in \mathcal{A}$$, is the reward function.  It represents the expected reward of deciding on action $$a$$ on state $$s$$ with an assigned holding time of $$\tau$$ timesteps and landing on state $$s'$$.
+
+-   $$\mathcal{R}(s, \mathbf{a})$$, where $$s \in S$$, $$\mathbf{a} = \{a_1, \dots , a_k\}$$ and $$a_1 \in A_1, \dots , a_k \in A_k$$, represents the reward function. All agents recieve the same reward. 
 
 MMDPs can be thought as $$k$$-person stochastic games in which the payoff
 function is the same for all agents.
@@ -195,9 +182,9 @@ making the nature of dec-POMDPs collaborative. A decentralized Partially
 Observable Markov Decision Process is defined by an 8-element tuple
 $$(I, \mathcal{S}, \mathcal{A}_{1..k}, \mathcal{P}(\cdot | \cdot, \cdot), \mathcal{R}(\cdot, \cdot), \Omega_{1..k}, \mathcal{O(\cdot | \cdot, \cdot)}, H)$$:
 
--   $$\mathcal{S}$$ expresses the same concepts as in classical MDPs.
-
 -   $$I$$ is the set of all agent policies indexed $$1..k$$.[^1]
+
+-   $$\mathcal{S}$$ expresses the same concepts as in classical MDPs.
 
 -   $$\mathcal{A}_{1..k}$$ is a collection of action sets, one for each
     agent in the environment, with $$\mathcal{A}_i$$ corresponding to the
@@ -231,7 +218,7 @@ $$(I, \mathcal{S}, \mathcal{A}_{1..k}, \mathcal{P}(\cdot | \cdot, \cdot), \mathc
     $$\mathbf{o}$$, containing an observation for each agent, after
     executing the joint action $$\mathbf{a}$$ in state $$s$$.
 
--   $$H \in \mathbb{N}$$ represents the finite time horizon, the number of
+-   $$H \in \mathbb{N}^+$$ represents the finite time horizon, the number of
     steps over which the agents will try to maximize their cummulative
     reward. It serves a similar purporse to the more common discount
     factor $$\gamma$$ in that they are both used as a variance-bias trade
@@ -241,7 +228,7 @@ $$(I, \mathcal{S}, \mathcal{A}_{1..k}, \mathcal{P}(\cdot | \cdot, \cdot), \mathc
 A dec-POMDP featuring a single agent, $$|I| = 1$$, can be treated as a
 POMDP. Furthermore, when agents are permitted to have different reward
 functions, this model becomes a Partially Observable Stochastic Game
-(POSG) ([**???**]{.citeproc-not-found data-reference-id="Hansen2004"}).
+(POSG) (Hansen 2004).
 
 Markov Game
 -----------
@@ -355,6 +342,13 @@ doi:[10.1007/s10957-012-0015-8](https://doi.org/10.1007/s10957-012-0015-8).
 Sutton, Richard S., and Andrew G. Barto. 1998. *Reinforcement Learning:
 An Introduction*.
 doi:[10.1109/TNN.1998.712192](https://doi.org/10.1109/TNN.1998.712192).
+
+</div>
+
+<div id="ref-Hansen2004">
+
+Eric A. Hansen, Daniel S. Bernstein, Shlomo Zilberstein. 2004. *Dynamic programming for partially observable stochastic games*.
+[Paper link](://www.researchgate.net/publication/2887012_Dynamic_Programming_for_Partially_Observable_Stochastic_Games).
 
 </div>
 

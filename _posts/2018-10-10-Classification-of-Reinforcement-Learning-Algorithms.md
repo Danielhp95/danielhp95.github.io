@@ -3,7 +3,7 @@ layout: post
 cover: 'assets/images/shiva.jpg'
 title: Classification of RL algorithms
 date: 2017-07-21 04:00:00
-tags: Reinforcement Learning, Markov Decision Process
+tags: [RL]
 author: Daniii
 ---
 
@@ -25,23 +25,24 @@ On-policy and off-policy algorithms
 -----------------------------------
 
 If any RL algorithm can be regarded as a learning function mapping
-state-action-reward sequences, also known as paths or trajectories, to a
-policies \citep{Laurent2011}. Esentially all that RL algorithms do is
-applying a learning function over paths sampled from the environment and
-a policy. The key and only difference between on-policy and off-policy
+state-action-reward sequences, also known as paths or trajectories, to
+policies (Laurent2011); Esentially all that RL algorithms do is
+applying a learning function over paths sampled from the environment
+to compute a policy. The key and only difference between on-policy and off-policy
 algorithms is the following:
 
--   On-policy algorithms use the policy that they are learning about to
+-   On-policy algorithms use the same policy that they are learning to
     sample actions in the environment. A policy $$\pi$$ is both being
     improved overtime[^1] and also used to sample actions
     $$a \sim \pi(s)$$ inside of the environment.
 
 -   Off-policy algorithms use a behavioural policy $$\mu$$ to sample
     actions $$a \sim \mu(s)$$ and paths inside of the environment, and use
-    this information to improve a target policy $$\pi$$. The learning that
-    takes place in off-policy algorithms can be regarded as learning
-    from somebody else’s experience, whilst on policy algorithms focus
-    on learning from an agent’s own experience.
+    this information to improve a target policy $$\pi$$. 
+
+The learning that takes place in off-policy algorithms
+can be regarded as learning from somebody else’s experience,
+whilst on policy algorithms focus on learning from an agent’s own experience.
 
 On-policy algorithms dedicate all computational power on learning and
 using a single policy $$\pi$$. These methods can therefore focus on
@@ -57,18 +58,18 @@ more “imformative” trajectories with which we can improve $$\pi$$ through
 a learning function.
 
 By freeing computational time from directly improving the target policy
-$$\pi$$, it is possible to tackle many other tasks. \cite{Sutton2010} use
+$$\pi$$, it is possible to tackle many other tasks. (Sutton2010) use
 sensorimotor interaction with an environment to learn a multitude of
 pseudoreward that are used in conjunction with the environment’s reward
-signals. \cite{Jaderberg2016} takes this idea further by using an
+signals. (Jaderberg2016) takes this idea further by using an
 off-policy algorithms to learn auxiliary extra tasks: immediate reward
 prediction[^2] and a separate policy that maximizes the change in the
 state representation[^3].
 
 A method to allow algorithms to perform off-policy updates to their
 policies is to introduce the notion of an *experience
-replay* \citep{Lin1993}, which was made famous after the success
-of \cite{Mnih2013}. An experience replay is a list of experiences, where
+replay* (Lin1993), which was made famous after the success
+of (Mnih2013). An experience replay is a list of experiences, where
 each experience is a 5 element tuple
 $$<s_t, a_t, r_t, s_{t+1}, a_{t+1}>$$. As an agent acts in an environment
 the experience replay is filled. At the time of updating the policy an
@@ -80,20 +81,19 @@ generated using a previous policy, experience replay allows for policy
 updates to happen in an off-policy fashion.
 
 The idea of the experience replay buffer has been the focus of much
-recent research \citep{Schaul2015, Hessel2017}. A basic improvement is
+recent research (Schaul2015; Hessel2017). A basic improvement is
 to use a *prioritized* experience replay. The difference being that
 experiences are not sampled uniformly from the replay buffer.
 
-**Famous on-policy algorithms:** Sarsa \citep{Sutton1998},
-$$Q(\sigma)$$ \citep{Deasis2017}, Monte Carlo Tree search (MCTS),
-REINFORCE \citep{Williams1992}, Asynchronous Advantage estimation Actor
-Critic (A3C).
+**Famous on-policy algorithms:** Sarsa (Sutton1998),
+[$$Q(\sigma)$$](https://arxiv.org/abs/1703.01327), [Monte Carlo Tree search](http://mcts.ai/pubs/mcts-survey-master.pdf),
+[REINFORCE](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf), 
+[A3C](https://arxiv.org/pdf/1602.01783).
 
-**Famous off-policy algorithms:** Q-learning, Deep Q-Network
-(DQN) \citep{Mnih2013}, Deterministic Policy Gradient
-(DPG) \citep{Silver2014}. Deep Deterministic Policy Gradient
-(DDPG) \citep{Lillicrap2015}, Importance Weighted Actor-Learner
-Architecture (IMPALA) \citep{Espeholt2018}.
+**Famous off-policy algorithms:** Q-learning, [Deep Q-Network](https://arxiv.org/abs/1312.5602),
+[Deterministic Policy Gradient](http://proceedings.mlr.press/v32/silver14.pdf),
+[Deep Deterministic Policy Gradient](https://arxiv.org/abs/1509.02971),
+[Importance Weighted Actor-Learner Architecture](https://arxiv.org/abs/1802.01561).
 
 Value based
 -----------
@@ -103,22 +103,20 @@ policy $$\pi$$ from a state value function $$V(s)$$ or a state action value
 function $$Q(s,a)$$. These include most if not all of the traditional RL
 algorithms. There are various methods for extracting a policy from a
 value function. The simplest form of deriving a policy from a value
-function is to create a policy that acts greedily w.r.t a value
-function:
+function is to create a policy that acts greedily with respect to a value function:
 
 $$\label{equation:policy-extraction}
 \begin{aligned}
-    \forall s \in \mathcal{S}: \quad \pi(s) &= \argmax_{a} \sum_{s' \in Succ(s)} P(s' \mid s, a) V(s') \quad & (\text{Deriving policy from } V(s)) \\
-    \forall s \in \mathcal{S}: \quad \pi(s) &= \argmax_{a} Q_{\pi}(s,a) \quad & (\text{Deriving policy from } Q(s,a))
+    \forall s \in \mathcal{S}: \quad \pi(s) &= \underset{a}{\text{argmax}} \sum_{s' \in Succ(s)} P(s' \mid s, a) V(s') \quad & (\text{Deriving policy from } V(s)) \\
+    \forall s \in \mathcal{S}: \quad \pi(s) &= \underset{a}{\text{argmax}} \;  Q_{\pi}(s,a) \quad & (\text{Deriving policy from } Q(s,a))
 \end{aligned}$$
 
-Some algorithms such as Q-learning, covered in
-Section \[section:q-learning\], and SARSA bootstrap a state action value
+Some algorithms such as Q-learning or SARSA bootstrap a state action value
 function $$Q(s,a)$$ towards the value functions of an optimal policy,
 $$Q_{\pi^*}(s,a)$$. Temporal Difference (TD) algorithms bootstrap a state
 value function $$V(s)$$ towards the value function of an optimal policy,
 $$V_{\pi^*}(s)$$. These algorithms have been proved to converge to the
-optimal value functions, so an optimal policy $$\pi^*$$ can be derived
+optimal value functions ([under some assumptions]({{ site.baseurl }}/qlearning)), so an optimal policy $$\pi^*$$ can be derived
 once the bootstraping process converges.
 
 Other methods, like Value iteration or Policy iteration go through an
@@ -132,15 +130,15 @@ loop is computed using $$\pi'$$. This two step process is proved to
 converge to both the optimal value function and optimal policy.
 
 **Famous value based algorithms:** Value iteration, Policy iteration,
-SARSA, TD(0), TD(1), TD($$\lambda$$) \citep{Sutton1998}, Q-learning, DQN
+SARSA, TD(0), TD(1), TD($$\lambda$$) (Sutton1998), Q-learning, DQN
 and it’s many variants: Dueling DQN, Distributional DQN, Prioritized DQN
-and Double DQN. These can be found in \citep{Hessel2017}
+and Double DQN. These can be found in (Hessel2017).
 
 Policy based
 ------------
 
-Both Policy based and actor-critic methods will be covered in depth in
-section \[section:policy-gradient-methods\]. These algorithms do not
+Both Policy based and actor-critic methods are covered [in this post]({{ site.baseurl }}/policy-gradient-algorithms-a-review). 
+These algorithms do not
 extract a policy from a calculated value function. Instead, they
 represent a policy $$\pi_{\theta}$$ through a parameter vector
 $$\theta \in \mathbb{R}^D$$. By defining both the utility of a policy’s
@@ -148,15 +146,16 @@ parameters $$U(\theta)$$ and its gradient w.r.t the policy’s parameters
 $$\nabla_{\theta}U(\theta)$$, it is possible to iteratively update the
 policy parameters in a direction of utility improvement.
 
-**Famous policy based algorithms:** vanilla policy gradient,
-REINFORCE\citep{Williams1992} and the REINFORCE family of algorithms.
+**Famous policy based algorithms:** 
+[REINFORCE](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf),
+[PPO](https://arxiv.org/abs/1707.06347), [TRPO](https://arxiv.org/abs/1502.05477).
 
 Actor-critic
 ------------
 
 Policy based only (actor only) and value based only (critic only)
 algorithms feature some crippling weaknesses that make them unsuitable
-for complex environments. \citep{Konda2000} states some of their key
+for complex environments. (Konda2000) states some of their key
 downsides:
 
 -   **Critic only algorithms**: The goal of any reinforcement learning
@@ -183,7 +182,7 @@ convergence than actor-only methods because of a significant decrease in
 variance in the estimation of the gradient of the policy’s performance.
 It also entails better convergence properties than critic-only methods.
 
- \cite{Konda2000} make the key observation that in actor-critic
+ (Konda2000) make the key observation that in actor-critic
 algorithms, the actor parameterization and the critic parameterization
 should *not* be independent. The choice of critic parameters should be
 directly prescribed by the choice of the actor parameters. That is why
@@ -193,9 +192,9 @@ the policy (actor) and the value function approximation (critic). This
 is the most straight forward way of sharing parameters between actor and
 critic.
 
-**Famous actor critic algorithms:** A3C \citep{Mnih2016},
-PPO \citep{Schulman2017}, TRPO \citep{Schulman2015},
-ACKTR \citep{Wu2017}.
+**Famous actor critic algorithms:** [A3C](https://arxiv.org/pdf/1602.01783),
+[PPO](https://arxiv.org/abs/1707.06347), [TRPO](https://arxiv.org/abs/1502.05477),
+[ACKTR](https://arxiv.org/pdf/1708.05144).
 
 Model based and model free approaches
 -------------------------------------
@@ -207,15 +206,75 @@ optimal policy $$\pi^*$$ without explicitly using either $$\mathcal{P}$$ or
 $$\mathcal{R}$$ in their calculations.
 
 Model based algorithms are either given a prior model that they can use
-for planning \citep{browne2012survey, Soemers2014}, or they learn a
+for planning (Browne2012), or they learn a
 representation via their own interaction with the environment
-\citep{Sutton1991, Guzdial2017, Deisenroth2011}. Note that an advantage
+(Sutton1991, Deisenroth2011). Note that an advantage
 of learning a model specifically tailored for an agent, is that you can
 choose a representation of the environment that is relevant to the
-agent’s decision making process. (Talk about curiosity and modelling
-only that you care about) \citep{Pathak2017}. Another advantage of
+agent’s decision making process, which can allow you to learn only the 
+elements of the environment that influence the agent's learning (Pathak2017). Another advantage of
 having a model is that it allows for forward planning, which is the main
 method of learning for search-based artificial intelligence.
+
+
+Time for References!
+------------
+
+<div id="refs" class="references">
+  
+<div id="ref-Laurent2011">
+Laurent, Guillaume J.  Matignon, Laëtitia Fort-Piat, N. Le. 2011. *The world of independent learners is not markovian*.
+</div>
+
+<div id="ref-Sutton2010">
+Sutton, Richard, S Modayil, Joseph Delp, Michael. 2010. *Horde: A Scalable Real-time Architecture for Learning Knowledge from Unsupervised Sensorimotor Interaction Categories and Subject Descriptors*.
+</div>
+
+<div id="ref-Jaderberg2016">
+Jaderberg, Max Mnih, Volodymyr Czarnecki, Wojciech Marian. 2016. *Reinforcement Learning with Unsupervised Auxiliary Tasks*.
+</div>
+
+<div id="ref-Lin1993">
+Lin, Long-ji. 1993. *Reinforcement Learning for Robots Using Neural Networks*.
+</div>
+
+<div id="ref-Mnih2013">
+Mnih, Volodymyr Kavukcuoglu, Koray Silver, David. 2013. *Playing Atari with Deep Reinforcement Learning*.
+</div>
+
+<div id="ref-Schaul2015">
+Schaul, Tom Quan, John Antonoglou, Ioannis Silver, David. 2015. *Prioritized Experienced Replay*.
+</div>
+
+<div id="ref-Hessel2017">
+Hessel, Matteo Modayil, Joseph van Hasselt, Hado. 2017. *Rainbow: Combining Improvements in Deep Reinforcement Learning*.
+</div>
+
+<div id="ref-Sutton1998">
+Richard Sutton, Barto. 1998. *Reinforcement learning: An introduction*.
+</div>
+
+<div id="ref-Konda2000">
+Konda Vijay, R Tsitsiklis, John N. 2000. *Actor-Critic algorithms* 
+</div>
+
+<div id="ref-Sutton1991">
+Richard Sutton. 1991. *Dyna, an integrated architecture for learning, planning, and reacting*
+</div>
+
+<div id="ref-Browne2012">
+Browne Cameron B, Powley Edward, Whitehouse Daniel, Lucas Simon M, Cowling Peter, Rohlfshagen Philipp, Tavener Stephen, Perez Diego, Samothrakis Spyridon, Colton Simon. 2012. *A Survey of Monte Carlo Tree Search Methods*.
+</div>
+
+<div id="ref-Deisenroth2011">
+Deisenroth Marc, Peter Rasmussen, Carl Edward. 2011. *PILCO: A Model-Based and Data-Efficient Approach to Policy Search*
+</div>
+
+<div id="ref-Pathak2017">
+Pathak Deepak, Agrawal Pulkit. 2017. *Curiosity-Driven Exploration by Self-Supervised Prediction*
+</div>
+
+</div>
 
 [^1]: The notion of improvement overtime is expressed as a monotonic
     increase in the expected reward of an episode
