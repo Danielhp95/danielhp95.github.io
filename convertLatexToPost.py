@@ -13,7 +13,6 @@ def get_current_date():
                                       currentDate.minute, currentDate.second)
     return date
 
-
 def append_to_file(filePath, string):
     with open(filePath, 'r+') as f:
         content = f.read()
@@ -40,7 +39,6 @@ def create_markdown_file_from_tex(textFilePath, markdownTargetFilePath, bibliogr
     pypandoc.convert_file(textFilePath, "markdown-citations", outputfile=markdownTargetFilePath, extra_args=bibliographyArg)
 
 
-# TODO.   Find way of reading whole content to file and parse strings accordingly (or literally call a one liner for perll
 def fix_formating_mathjax_equations(filePath):
     regex = 's/(?<!\$)\$(?!\$)/\$\$/g'
     apply_regex_to_file(filePath, regex)
@@ -70,25 +68,25 @@ def create_new_post(textFilePath=None, postName="", bibliographyPath=None):
 
     fix_formating_mathjax_equations(newPostFilePath)
 
-    #add_reference_text_to_references(newPostFilePath)
+    # add_reference_text_to_references(newPostFilePath)
 
 
 if __name__ == '__main__':
     #_USAGE = '''
-    #Usage:
-    #    convertolatex  --source-latex-file=<file> --destination-markdown-file=<file> [--bibtex-file=<file>]
-    #    convertolatex --help
+    # Usage:
+    #     convertolatex --source-latex-file=<file> --destination-markdown-file=<file> [--bibtex-file=<file>]
+    #     convertolatex --help
 
-    #Options:
-    #    --source-latex-file=<file>             Name of the *.tex file containing the source material [default:None]
-    #    --destination-markdown-file=<file2>    Name of the new file containing the markdown blogpost [default:None]
-    #    --bibtex-file=<file3>                  Bibtex file used to cite references [default:None]
-    #'''
-    #options = docopt(_USAGE)
-    #print("help")
-    #if options['--source-latex-file'] is None or options['--destination-markdown-file'] is None:
-    #    print("inside if")
-    #    print(options['--help'])
-    #else: 
-    #    print("past if")
+    # Options:
+    #     --source-latex-file=<file>             Name of the *.tex file containing the source material [default:None]
+    #     --destination-markdown-file=<file2>    Name of the new file containing the markdown blogpost [default:None]
+    #     --bibtex-file=<file3>                  Bibtex file used to cite references [default:None]
+    # '''
+    # options = docopt(_USAGE)
+    # print("help")
+    # if options['--source-latex-file'] is None or options['--destination-markdown-file'] is None:
+    #     print("inside if")
+    #     print(options['--help'])
+    # else: 
+    #     print("past if")
     create_new_post(textFilePath=sys.argv[1], postName=sys.argv[2], bibliographyPath=sys.argv[3])
