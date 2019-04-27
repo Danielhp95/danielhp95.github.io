@@ -30,6 +30,7 @@ def append_post_metadata_to_post_file(filePath, title=None, tags=[], layout='pos
               'title: {}\n'.format(title) + \
               'date: {}\n'.format(date) + \
               'tags: {}\n'.format(tags) + \
+              'author: Daniii\n' + \
               '---\n'
     append_to_file(filePath, headers)
 
