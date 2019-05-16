@@ -1,8 +1,8 @@
 - title: Home
-  url: 
+  url: / 
 
 - title: About
-  url: about
+  url: /about
 
-- title: Publications
-  url: publications
+- title: Projects & Publications
+  url: /projects-and-publications
